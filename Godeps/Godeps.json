@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/rach/pgboard",
+	"ImportPath": "github.com/rach/pomod",
 	"GoVersion": "go1.4.2",
 	"Deps": [
 		{
@@ -14,6 +14,10 @@
 		{
 			"ImportPath": "github.com/alecthomas/units",
 			"Rev": "6b4e7dc5e3143b85ea77909c72caf89416fc2915"
+		},
+		{
+			"ImportPath": "github.com/elazarl/go-bindata-assetfs",
+			"Rev": "d5cac425555ca5cf00694df246e04f05e6a55150"
 		},
 		{
 			"ImportPath": "github.com/jmoiron/sqlx",
