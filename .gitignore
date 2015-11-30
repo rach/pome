@@ -2,3 +2,4 @@
 node_modules
 bindata.go
 static/build/
+/pomod
