@@ -1,0 +1,26 @@
+@import "bootstrap-flex";
+
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: auto;
+    position: relative;
+    width: 960px;
+}
+
+text {
+    font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+rect {
+    fill: #aad;
+    &:hover{
+      fill: darken(#aad, 10%);
+    }
+}
