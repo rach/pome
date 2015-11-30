@@ -1,21 +1,21 @@
 package main
 
 import (
+	"fmt"
 	"github.com/alecthomas/kingpin"
 	"github.com/elazarl/go-bindata-assetfs"
 	"net/http"
 )
 
 //go:generate go-bindata -prefix "static/" -pkg main -o bindata.go static/index.html static/build/...
-//go:generate cd static && echo "1"
 
 var (
 	host = kingpin.Flag("host", "database server host (default: localhost)").
 		Short('h').PlaceHolder("HOSTNAME").Default("localhost").String()
 	port = kingpin.Flag("port", "database server port (default: 5432)").
-		Short('p').Default("5432").PlaceHolder("PORT").Int()
+		Short('p').Default("2345").PlaceHolder("PORT").Int()
 	username = kingpin.Flag("username", "").
-			Short('U').Default("5432").PlaceHolder("USERNAME").String()
+			Short('U').PlaceHolder("USERNAME").Required().String()
 	database = kingpin.Arg("DBNAME", "").Required().String()
 )
 
@@ -34,5 +34,5 @@ func main() {
 	http.Handle("/",
 		http.FileServer(
 			&assetfs.AssetFS{Asset: Asset, AssetDir: AssetDir, Prefix: ""}))
-	http.ListenAndServe(":3000", nil)
+	http.ListenAndServe(fmt.Sprintf(":%d", *port), nil)
 }
