@@ -1,12 +1,75 @@
 package main
 
-// http://www.databasesoup.com/2014/04/new-new-index-bloat-query.html
-// https://github.com/heroku/pgdiagnose/blob/ec99d338839fdb7f46ad81a416121779898b803f/checks.go#L325
+import (
+	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
+	"log"
+)
 
-//#number connection
-//#memomy used
-//#dbsized
-//#seqscan
+type IndexBloatDatabaseResult struct {
+	Key        string  `db:"key"`
+	Schema     string  `db:"schema"`
+	Table      string  `db:"table"`
+	Index      string  `db:"index"`
+	BloatBytes int     `db:"bloat_bytes"`
+	BloatRatio float64 `db:"bloat_ratio"`
+}
+
+type NumberOfConnectionResult struct {
+	Count int `db:"num_connections"`
+}
+type DatabaseSizeResult struct {
+	TableSize  int     `db:"table_size"`
+	IndexSize  int     `db:"index_size"`
+	TotalSize  int     `db:"total_size"`
+	IndexRatio float64 `db:"index_ratio"`
+}
+
+type TableBloatDatabaseResult struct {
+	Key        string  `db:"key"`
+	Schema     string  `db:"schema"`
+	Table      string  `db:"table"`
+	BloatBytes int     `db:"bloat_bytes"`
+	BloatRatio float64 `db:"bloat_ratio"`
+}
+
+type databaseResultFct func(db *sqlx.DB) interface{}
+
+func GetIndexBloatResult(db *sqlx.DB) interface{} {
+	r := []IndexBloatDatabaseResult{}
+	err := db.Select(&r, IndexBloatSql)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return r
+}
+
+func GetTableBloatResult(db *sqlx.DB) interface{} {
+	r := []TableBloatDatabaseResult{}
+	err := db.Select(&r, TableBloatSql)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return r
+}
+
+func GetNumberOfConnectionResult(db *sqlx.DB) interface{} {
+	r := NumberOfConnectionResult{}
+	err := db.Get(&r, NumberOfConnectionSql)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return r
+}
+
+func GetDatabeSizeResult(db *sqlx.DB) interface{} {
+	r := DatabaseSizeResult{}
+	err := db.Get(&r, DatabaseSizeSql)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return r
+}
 
 const (
 	IndexBloatSql = `
@@ -86,7 +149,7 @@ SELECT  nspname || '.' || tablename || '.' || index_name AS key,
 				nspname AS schema,
 				tablename as table,
         index_name AS index,
-        wastedbytes as bloat_size,
+        wastedbytes as bloat_bytes,
         round(realbloat, 1) as bloat_ratio
   --     , totalbytes as index_size,
   --      table_bytes, pg_size_pretty(table_bytes) as table_size
@@ -153,7 +216,7 @@ FROM (
 `
 
 	NumberOfConnectionSql = `
-SELECT numbackends FROM pg_stat_database WHERE datname = current_database()
+SELECT numbackends as num_connections FROM pg_stat_database WHERE datname = current_database()
 `
 
 	DatabaseSizeSql = `
@@ -175,60 +238,4 @@ FROM (
     ORDER BY total_size DESC
 ) AS pretty_sizes;
 `
-
-// WITH bloat as (
-// SELECT
-//   current_database(), schemaname, tablename, /*reltuples::bigint, relpages::bigint, otta,*/
-//   ROUND(CASE WHEN otta=0 THEN 0.0 ELSE sml.relpages/otta::NUMERIC END,1) AS tbloat,
-//   CASE WHEN relpages < otta THEN 0 ELSE bs*(sml.relpages-otta)::BIGINT END AS wastedbytes,
-//   iname, /*ituples::bigint, ipages::bigint, iotta,*/
-//   ROUND(CASE WHEN iotta=0 OR ipages=0 THEN 0.0 ELSE ipages/iotta::NUMERIC END,1) AS ibloat,
-//   CASE WHEN ipages < iotta THEN 0 ELSE bs*(ipages-iotta) END AS wastedibytes
-// FROM (
-//   SELECT
-//     schemaname, tablename, cc.reltuples, cc.relpages, bs,
-//     CEIL((cc.reltuples*((datahdr+ma-
-//       (CASE WHEN datahdr%ma=0 THEN ma ELSE datahdr%ma END))+nullhdr2+4))/(bs-20::FLOAT)) AS otta,
-//     COALESCE(c2.relname,'?') AS iname, COALESCE(c2.reltuples,0) AS ituples, COALESCE(c2.relpages,0) AS ipages,
-//     COALESCE(CEIL((c2.reltuples*(datahdr-12))/(bs-20::FLOAT)),0) AS iotta -- very rough approximation, assumes all cols
-//   FROM (
-//     SELECT
-//       ma,bs,schemaname,tablename,
-//       (datawidth+(hdr+ma-(CASE WHEN hdr%ma=0 THEN ma ELSE hdr%ma END)))::NUMERIC AS datahdr,
-//       (maxfracsum*(nullhdr+ma-(CASE WHEN nullhdr%ma=0 THEN ma ELSE nullhdr%ma END))) AS nullhdr2
-//     FROM (
-//       SELECT
-//         schemaname, tablename, hdr, ma, bs,
-//         SUM((1-null_frac)*avg_width) AS datawidth,
-//         MAX(null_frac) AS maxfracsum,
-//         hdr+(
-//           SELECT 1+COUNT(*)/8
-//           FROM pg_stats s2
-//           WHERE null_frac<>0 AND s2.schemaname = s.schemaname AND s2.tablename = s.tablename
-//         ) AS nullhdr
-//       FROM pg_stats s, (
-//         SELECT
-//           (SELECT current_setting('block_size')::NUMERIC) AS bs,
-//           CASE WHEN SUBSTRING(v,12,3) IN ('8.0','8.1','8.2') THEN 27 ELSE 23 END AS hdr,
-//           CASE WHEN v ~ 'mingw32' THEN 8 ELSE 4 END AS ma
-//         FROM (SELECT version() AS v) AS foo
-//       ) AS constants
-//       GROUP BY 1,2,3,4,5
-//     ) AS foo
-//   ) AS rs
-//   JOIN pg_class cc ON cc.relname = rs.tablename
-//   JOIN pg_namespace nn ON cc.relnamespace = nn.oid AND nn.nspname = rs.schemaname AND nn.nspname <> 'information_schema'
-//   LEFT JOIN pg_index i ON indrelid = cc.oid
-//   LEFT JOIN pg_class c2 ON c2.oid = i.indexrelid
-// ) AS sml)
-// SELECT
-//   SUM(tgb.wastedbytes) total_wastedbytes,
-//   SUM(tgb.tg_wastedibytes) total_wastedibytes,
-//   MAX(tgb.tbloat) most_bloated_table,
-//   MAX(tgb.tg_ibloat) most_bloated_index
-// FROM (
-//   SELECT MAX(current_database) current_database, MAX(tbloat) tbloat, MAX(wastedbytes) wastedbytes,
-//          MAX(ibloat) tg_ibloat, SUM(wastedibytes) tg_wastedibytes FROM bloat GROUP BY bloat.tablename) AS tgb
-// GROUP BY tgb.current_database
-
 )

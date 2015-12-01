@@ -26,10 +26,10 @@ func main() {
 	var connstring = connectionString(*host, *username)
 	db, _ := connectDB(connstring)
 	context := &appContext{db, &metrics}
-	go metricScheduler(db, &metrics, indexBloatUpdate, 12*60*60, 120)
-	go metricScheduler(db, &metrics, tableBloatUpdate, 12*60*60, 120)
-	go metricScheduler(db, &metrics, databaseSizeUpdate, 60*60, 120)
-	go metricScheduler(db, &metrics, numberOfConnectionUpdate, 5*60, 120)
+	go metricScheduler(db, &metrics, indexBloatUpdate, GetIndexBloatResult, 12*60*60, 120)
+	go metricScheduler(db, &metrics, tableBloatUpdate, GetTableBloatResult, 12*60*60, 120)
+	go metricScheduler(db, &metrics, databaseSizeUpdate, GetDatabeSizeResult, 60*60, 120)
+	go metricScheduler(db, &metrics, numberOfConnectionUpdate, GetNumberOfConnectionResult, 5*60, 120)
 	http.Handle("/api/stats", appHandler{context, metricsHandler})
 	http.Handle("/",
 		http.FileServer(
