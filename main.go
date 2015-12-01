@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/alecthomas/kingpin"
-	"github.com/elazarl/go-bindata-assetfs"
+	"github.com/rach/pomod/Godeps/_workspace/src/github.com/alecthomas/kingpin"
+	"github.com/rach/pomod/Godeps/_workspace/src/github.com/elazarl/go-bindata-assetfs"
 	"net/http"
 )
 

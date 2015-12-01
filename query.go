@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
+	"github.com/rach/pomod/Godeps/_workspace/src/github.com/jmoiron/sqlx"
+	_ "github.com/rach/pomod/Godeps/_workspace/src/github.com/lib/pq"
 	"log"
 )
 
