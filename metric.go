@@ -6,23 +6,13 @@ import (
 	"fmt"
 	"github.com/rach/pomod/Godeps/_workspace/src/github.com/jmoiron/sqlx"
 	_ "github.com/rach/pomod/Godeps/_workspace/src/github.com/lib/pq"
-	"log"
 	"math"
 	"time"
 )
 
-func connectDB(dbURL string) (*sqlx.DB, error) {
-	db, err := sqlx.Open("postgres", dbURL)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	_, err = db.Exec("select 1")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return db, nil
+func connectDB(dbURL string) *sqlx.DB {
+	db := sqlx.MustOpen("postgres", dbURL)
+	return db
 }
 
 func connectionString(host string, username string) string {

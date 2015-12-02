@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/rach/pomod/Godeps/_workspace/src/github.com/elazarl/go-bindata-assetfs"
 	"github.com/rach/pomod/Godeps/_workspace/src/github.com/jmoiron/sqlx"
 	_ "github.com/rach/pomod/Godeps/_workspace/src/github.com/lib/pq"
 	"io"
@@ -43,6 +44,14 @@ type appContext struct {
 type appHandler struct {
 	*appContext
 	H func(*appContext, http.ResponseWriter, *http.Request) (int, error)
+}
+
+func initWebServer(context *appContext) {
+	http.Handle("/api/stats", appHandler{context, metricsHandler})
+	http.Handle("/",
+		http.FileServer(
+			&assetfs.AssetFS{Asset: Asset, AssetDir: AssetDir, Prefix: ""}))
+	http.ListenAndServe(fmt.Sprintf(":%d", *port), nil)
 }
 
 func (ah appHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {

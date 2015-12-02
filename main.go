@@ -1,10 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"github.com/rach/pomod/Godeps/_workspace/src/github.com/alecthomas/kingpin"
-	"github.com/rach/pomod/Godeps/_workspace/src/github.com/elazarl/go-bindata-assetfs"
-	"net/http"
 )
 
 //go:generate go-bindata -prefix "static/" -pkg main -o bindata.go static/index.html static/build/...
@@ -24,15 +21,11 @@ func main() {
 	kingpin.Parse()
 	var metrics = MetricList{}
 	var connstring = connectionString(*host, *username)
-	db, _ := connectDB(connstring)
+	db := connectDB(connstring)
 	context := &appContext{db, &metrics}
 	go metricScheduler(db, &metrics, indexBloatUpdate, GetIndexBloatResult, 12*60*60, 120)
 	go metricScheduler(db, &metrics, tableBloatUpdate, GetTableBloatResult, 12*60*60, 120)
 	go metricScheduler(db, &metrics, databaseSizeUpdate, GetDatabeSizeResult, 60*60, 120)
 	go metricScheduler(db, &metrics, numberOfConnectionUpdate, GetNumberOfConnectionResult, 5*60, 120)
-	http.Handle("/api/stats", appHandler{context, metricsHandler})
-	http.Handle("/",
-		http.FileServer(
-			&assetfs.AssetFS{Asset: Asset, AssetDir: AssetDir, Prefix: ""}))
-	http.ListenAndServe(fmt.Sprintf(":%d", *port), nil)
+	initWebServer(context)
 }
