@@ -220,3 +220,15 @@ func TestNumberOfConnectionUpdate(t *testing.T) {
 		}
 	}
 }
+
+func TestAppendAndFilter(t *testing.T) {
+	l := []Metric{}
+	l = appendAndFilter(l, databaseSizeMetric{}, 1)
+	if len(l) != 1 {
+		t.Error("length expected to be 1")
+	}
+	l = appendAndFilter(l, databaseSizeMetric{}, 1)
+	if len(l) != 1 {
+		t.Error("length expected to still be 1 because of the limit")
+	}
+}
