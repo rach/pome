@@ -4,8 +4,8 @@
 	"Deps": [
 		{
 			"ImportPath": "github.com/alecthomas/kingpin",
-			"Comment": "v2.0.10-6-g7a12ddc",
-			"Rev": "7a12ddc15eba416485e0dfe47d2fe1ef3643d22f"
+			"Comment": "v2.1.7-4-g8852570",
+			"Rev": "8852570bd3865e9c4d4cb7cf5001c4295b07cad5"
 		},
 		{
 			"ImportPath": "github.com/alecthomas/template",

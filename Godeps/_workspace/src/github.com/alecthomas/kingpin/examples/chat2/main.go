@@ -4,7 +4,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/rach/pomod/Godeps/_workspace/src/github.com/alecthomas/kingpin"
+	"gopkg.in/alecthomas/kingpin.v2"
 )
 
 var (
