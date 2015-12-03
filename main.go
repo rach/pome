@@ -2,25 +2,34 @@ package main
 
 import (
 	"github.com/rach/pomod/Godeps/_workspace/src/github.com/alecthomas/kingpin"
+	"os"
 )
 
 //go:generate go-bindata -prefix "static/" -pkg main -o bindata.go static/index.html static/build/...
 
 var (
-	host = kingpin.Flag("host", "database server host (default: localhost)").
+	app  = kingpin.New("pomod", "A Postgres Monitoring Tool.")
+	host = app.Flag("host", "database server host (default: localhost)").
 		Short('h').PlaceHolder("HOSTNAME").Default("localhost").String()
-	port = kingpin.Flag("port", "database server port (default: 5432)").
+	port = app.Flag("port", "database server port (default: 2345)").
 		Short('p').Default("2345").PlaceHolder("PORT").Int()
-	username = kingpin.Flag("username", "").
+	password = app.Flag("password", "").
+			Short('W').PlaceHolder("PASSWORD").String()
+	username = app.Flag("username", "").
 			Short('U').PlaceHolder("USERNAME").Required().String()
-	database = kingpin.Arg("DBNAME", "").Required().String()
+	database = app.Arg("DBNAME", "").Required().String()
 )
 
+func parseCmdLine(args []string) (command string, err error) {
+	//this is isolated from the main() function to make it more testable
+	app.Version("0.1.0")
+	return app.Parse(args)
+}
+
 func main() {
-	kingpin.Version("0.1.0")
-	kingpin.Parse()
+	kingpin.MustParse(parseCmdLine(os.Args[1:]))
 	var metrics = MetricList{}
-	var connstring = connectionString(*host, *username)
+	var connstring = connectionString(*host, *database, *username, *password)
 	db := connectDB(connstring)
 	context := &appContext{db, &metrics}
 	go metricScheduler(db, &metrics, indexBloatUpdate, GetIndexBloatResult, 12*60*60, 120)
