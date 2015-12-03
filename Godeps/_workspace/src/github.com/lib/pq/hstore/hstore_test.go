@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	_ "github.com/rach/pomod/Godeps/_workspace/src/github.com/lib/pq"
+	_ "github.com/rach/poda/Godeps/_workspace/src/github.com/lib/pq"
 )
 
 type Fatalistic interface {

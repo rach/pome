@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Provider } from 'react-redux';
-//import { ReduxRouter } from 'redux-router';
-import App from './app';
+import { ReduxRouter } from 'redux-router';
 
 export default class Root extends Component {
     constructor(props) {
@@ -14,7 +13,7 @@ export default class Root extends Component {
         const { store } = this.props;
         return (
                 <Provider store={store}>
-                    <App />
+                    <ReduxRouter />
                 </Provider>
         );
     }

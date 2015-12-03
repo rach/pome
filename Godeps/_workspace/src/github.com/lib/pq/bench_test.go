@@ -17,7 +17,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rach/pomod/Godeps/_workspace/src/github.com/lib/pq/oid"
+	"github.com/rach/poda/Godeps/_workspace/src/github.com/lib/pq/oid"
 )
 
 var (

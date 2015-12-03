@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/rach/pomod/Godeps/_workspace/src/github.com/alecthomas/units"
+	"github.com/rach/poda/Godeps/_workspace/src/github.com/alecthomas/units"
 )
 
 type Settings interface {

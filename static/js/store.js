@@ -1,17 +1,19 @@
-import { createStore, compose } from 'redux';
+import { createStore, compose, combineReducers } from 'redux';
+import { reduxReactRouter, routerStateReducer, ReduxRouter } from 'redux-router';
+import createHistory from 'history/lib/createBrowserHistory';
 import rootReducer from './reducers';
-//import routes from './routes';
+import routes from './routes';
 
 
-// const composedCreateStore = compose(
-//     reduxReactRouter({ routes })
-// )(createStore);
+const reducer = combineReducers({
+    router: routerStateReducer,
+    app: rootReducer
+});
 
-// export default function configureStore(initialState) {
-//     return finalCreateStore(rootReducer, initialState);
-// }
+const composedCreateStore = compose(
+    reduxReactRouter({ routes, createHistory })
+)(createStore);
 
 export default function configureStore(initialState) {
-    const store = createStore(rootReducer, initialState);
-    return store;
+    return composedCreateStore(reducer, initialState);
 }

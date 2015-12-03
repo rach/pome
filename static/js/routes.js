@@ -1,10 +1,12 @@
-import { Route } from 'react-router';
+import React from 'react';
+import { Route, IndexRoute } from 'react-router';
 import App from './containers/app';
-import {IndexListBloat, TableListBloat} from './containers/bloat';
+import Home from './containers/home';
+import {ListIndexBloat} from './containers/bloat';
 
 export default (
         <Route path="/" component={App}>
-        <Route path="bloat/indexes" component={IndexListBloat} />
-        <Route path="bloat/tables" component={TableListBloat} />
+            <IndexRoute component={Home} />
+            <Route path="bloat/indexes" component={ListIndexBloat} />
         </Route>
 )

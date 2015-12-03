@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/rach/pomod/Godeps/_workspace/src/github.com/jmoiron/sqlx"
-	_ "github.com/rach/pomod/Godeps/_workspace/src/github.com/lib/pq"
+	"github.com/rach/poda/Godeps/_workspace/src/github.com/jmoiron/sqlx"
+	_ "github.com/rach/poda/Godeps/_workspace/src/github.com/lib/pq"
 	"math"
 	"time"
 )

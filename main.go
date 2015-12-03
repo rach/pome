@@ -1,14 +1,14 @@
 package main
 
 import (
-	"github.com/rach/pomod/Godeps/_workspace/src/github.com/alecthomas/kingpin"
+	"github.com/rach/poda/Godeps/_workspace/src/github.com/alecthomas/kingpin"
 	"os"
 )
 
 //go:generate go-bindata -prefix "static/" -pkg main -o bindata.go static/index.html static/build/...
 
 var (
-	app  = kingpin.New("pomod", "A Postgres Monitoring Tool.")
+	app  = kingpin.New("poda", "A Postgres Monitoring Tool.")
 	host = app.Flag("host", "database server host (default: localhost)").
 		Short('h').PlaceHolder("HOSTNAME").Default("localhost").String()
 	port = app.Flag("port", "database server port (default: 2345)").

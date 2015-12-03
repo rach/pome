@@ -7,7 +7,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/rach/pomod/Godeps/_workspace/src/github.com/alecthomas/template"
+	"github.com/rach/poda/Godeps/_workspace/src/github.com/alecthomas/template"
 )
 
 var (

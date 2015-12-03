@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/rach/pomod/Godeps/_workspace/src/github.com/jmoiron/sqlx"
+	"github.com/rach/poda/Godeps/_workspace/src/github.com/jmoiron/sqlx"
 	"testing"
 )
 
