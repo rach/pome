@@ -1,10 +1,21 @@
 package main
 
 import (
+	"fmt"
 	"github.com/rach/pomod/Godeps/_workspace/src/github.com/jmoiron/sqlx"
 	_ "github.com/rach/pomod/Godeps/_workspace/src/github.com/lib/pq"
 	"log"
 )
+
+func connectDB(dbURL string) *sqlx.DB {
+	db := sqlx.MustOpen("postgres", dbURL)
+	return db
+}
+
+func connectionString(host string, dbname string, username string, password string) string {
+	// TODO: escape single quote
+	return fmt.Sprintf("host='%s' dbname='%s' user='%s' password='%s' sslmode=disable", host, dbname, username, password)
+}
 
 type IndexBloatDatabaseResult struct {
 	Key        string  `db:"key"`

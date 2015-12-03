@@ -1,24 +1,11 @@
 package main
 
 import (
-	//  "os/user"
-	//	"database/sql"
-	"fmt"
 	"github.com/rach/pomod/Godeps/_workspace/src/github.com/jmoiron/sqlx"
 	_ "github.com/rach/pomod/Godeps/_workspace/src/github.com/lib/pq"
 	"math"
 	"time"
 )
-
-func connectDB(dbURL string) *sqlx.DB {
-	db := sqlx.MustOpen("postgres", dbURL)
-	return db
-}
-
-func connectionString(host string, username string) string {
-	// TODO: escape single quote
-	return fmt.Sprintf("dbname='%s' user='%s' password='' sslmode=disable", host, username)
-}
 
 type MetricList struct {
 	TableBloat           map[string]Metric `json:"table_bloat"`
