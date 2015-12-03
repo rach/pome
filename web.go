@@ -20,22 +20,6 @@ func metricsHandler(a *appContext, w http.ResponseWriter, r *http.Request) (int,
 	return 200, nil
 }
 
-func staticHandler(rw http.ResponseWriter, req *http.Request) {
-	var path string = req.URL.Path
-	//fmt.Println(path)
-	if path == "" {
-		path = "index.html"
-	}
-	if bs, err := Asset(path); err != nil {
-		rw.WriteHeader(http.StatusNotFound)
-	} else {
-		fmt.Fprintf(rw, http.DetectContentType(bs[:]))
-		rw.Header().Set("Content-Type", http.DetectContentType(bs[:]))
-		var reader = bytes.NewBuffer(bs)
-		io.Copy(rw, reader)
-	}
-}
-
 type appContext struct {
 	db      *sqlx.DB
 	metrics *MetricList
