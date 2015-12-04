@@ -1,13 +1,11 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"github.com/rach/poda/Godeps/_workspace/src/github.com/elazarl/go-bindata-assetfs"
 	"github.com/rach/poda/Godeps/_workspace/src/github.com/jmoiron/sqlx"
 	_ "github.com/rach/poda/Godeps/_workspace/src/github.com/lib/pq"
-	"io"
 	"log"
 	"net/http"
 )
