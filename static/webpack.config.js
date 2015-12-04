@@ -1,6 +1,7 @@
 const autoprefixer = require('autoprefixer');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');
+const webpack = require('webpack');
 
 
 const sassIncludePaths = [
@@ -43,6 +44,9 @@ const config = {
         publicPath: '/build'
     },
     plugins: [
+        new webpack.ProvidePlugin({
+            'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'
+        }),
         new ExtractTextPlugin('[name].css')
     ],
     postcss: [

@@ -1,22 +1,31 @@
-import jQuery from 'jquery';
-import {RECEIVE_METRICS} from './types';
+import {REQUEST_METRICS, RECEIVE_METRICS} from './types';
+
+
 
 /*
  * action creators
  */
 
+function requestMetrics() {
+    return {
+        type: REQUEST_METRICS
+    };
+}
+
+function receiveMetrics(metrics) {
+    return {
+        type: RECEIVE_METRICS,
+        value: metrics
+    };
+}
+
 export function fetchMetrics() {
-    var result;
-    jQuery.ajax({
-        type: "GET",
-        url: "/api/stats",
-        async: false,
-        dataType: "json",
-        success : function(data) {
-            result = data;
-        }
-    });
-    return {type: RECEIVE_METRICS, value: result}; 
+    return dispatch => {
+        dispatch(requestMetrics());
+        return fetch("/api/stats")
+            .then(response => response.json())
+            .then(json => dispatch(receiveMetrics(json)));
+    };
 }
 
 
