@@ -1,6 +1,5 @@
 .tern-port
 node_modules
-bindata.go
 static/build/
 /poda
 /poda.test
