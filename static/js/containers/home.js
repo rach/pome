@@ -25,12 +25,21 @@ class Home extends Component {
         const xTableBloat = state.app.metrics.top_table_bloat.map((v)=> v.timestamp);
         const tableWaste = state.app.metrics.total_table_bloat_bytes.map((v)=> v.bloat_bytes);
         const xTableWaste = state.app.metrics.total_table_bloat_bytes.map((v)=> v.timestamp);
+        const databaseSize = state.app.metrics.database_size.map((v)=> v.total_size);
+        const xSize = state.app.metrics.database_size.map((v)=> v.timestamp);
+        const tablesSize = state.app.metrics.database_size.map((v)=> v.index_size);
+        const indexesSize = state.app.metrics.database_size.map((v)=> v.index_size);
+        const indexesRatio = state.app.metrics.database_size.map((v)=> v.index_ratio);
         return (
             <div>
-                <Chart data={indexBloat} x={xIndexBloat} yMax={100} yFormatter={formatPercent}/>
-                <Chart data={indexWaste} x={xIndexWaste} yFormatter={formatBytes} />
-                <Chart data={tableBloat} x={xTableBloat} yMax={100} yFormatter={formatPercent}/>
-                <Chart data={tableWaste} x={xTableWaste} yFormatter={formatBytes}/>
+                <Chart data={indexBloat} x={xIndexBloat} yMax={100} yFormatter={formatPercent} title={"Top Bloated Index"}/>
+                <Chart data={indexWaste} x={xIndexWaste} yFormatter={formatBytes} title={"Total Bloat Index Wasted Bytes"} />
+                <Chart data={tableBloat} x={xTableBloat} yMax={100} yFormatter={formatPercent} title={"Top Bloated Table"}/>
+                <Chart data={tableWaste} x={xTableWaste} yFormatter={formatBytes} title={"Total Bloat Table Wasted Bytes"}/>
+                <Chart data={databaseSize} x={xSize} yFormatter={formatBytes} title={"Database Size"}/>
+                <Chart data={tablesSize} x={xSize} yFormatter={formatBytes} title={"Table Size"}/>
+                <Chart data={indexesSize} x={xSize} yFormatter={formatBytes} title={"Indexes Size"}/>
+                <Chart data={indexesRatio} x={xSize} yMax={100} yFormatter={formatPercent} title={"Size Index Ratio"}/>
             </div>
         );
     }

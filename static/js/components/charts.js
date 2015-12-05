@@ -6,6 +6,7 @@ class Chart extends React.Component {
     static propTypes = {
         data: React.PropTypes.array,
         x: React.PropTypes.array,
+        title: React.PropTypes.string,
         yMax: React.PropTypes.number
     }
     render() {
@@ -77,8 +78,14 @@ class Chart extends React.Component {
             .attr("transform", "translate("+ margin.left + ", 0)")
             .call(yAxis);
         
-        return node.toReact();
-    }
+        return (
+            <div>
+                <h3>{this.props.title}</h3>
+                {node.toReact()}
+            </div>
+        );
+
+        }
 }
 
 export default Chart;

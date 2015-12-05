@@ -20,13 +20,13 @@ class App extends Component {
     render() {
         return (
             <div>
-                <nav className="navbar navbar-light bg-faded">
+                <nav className="navbar navbar-dark">
                     <div className="container">
-                        <a className="navbar-brand" href="#">Navbar</a>
+                        <a className="navbar-brand" href="#">Poda</a>
                         <ul className="nav navbar-nav">
                             <li className="nav-item active">
                                 <Link className="nav-link" to='/'>
-                                    Home <span className="sr-only">(current)</span>
+                                    Overview <span className="sr-only">(current)</span>
                                 </Link>
                             </li>
                             <li className="nav-item">
