@@ -5,13 +5,14 @@ import ReactFauxDOM from 'react-faux-dom';
 class Chart extends React.Component {
     static propTypes = {
         data: React.PropTypes.array,
-        x: React.PropTypes.array
+        x: React.PropTypes.array,
+        yMax: React.PropTypes.number
     }
     render() {
         var m =  120, // number of samples per layer
             data = this.props.data,
             xdata = this.props.x,
-            yMax = d3.max(this.props.data);
+            yMax = typeof this.props.yMax !== "undefined" ? this.props.yMax : d3.max(this.props.data);
 
         var margin = {top: 40, right: 60, bottom: 50, left: 60},
             width = 960 - margin.left - margin.right,
@@ -26,10 +27,8 @@ class Chart extends React.Component {
                 .range([height, 0]);
         
         var timeFormat = d3.time.format("%I:%M %p");
-        const xAxisFormat = (t) => {
-        //    if ((t % 12 ==0) || (t == xdata.length -1 && (t % 12 > 4))){
+        const xAxisFormatter = (t) => {
                 return timeFormat(new Date(xdata[t] * 1000));
-        //    }
         };
 
         var xAxis = d3.svg.axis()
@@ -37,7 +36,7 @@ class Chart extends React.Component {
                 .tickValues(d3.range(0, xdata.length, 12))
                 .tickSize(2, 0)
                 .tickPadding(6)
-                .tickFormat(xAxisFormat)
+                .tickFormat(xAxisFormatter)
                 .orient("bottom");
 
         var yAxis = d3.svg.axis()
@@ -45,6 +44,7 @@ class Chart extends React.Component {
                 .ticks(3)
                 .tickSize(0)
                 .tickPadding(6)
+                .tickFormat(this.props.yFormatter)
                 .orient("left");
         
         const node = ReactFauxDOM.createElement('svg');

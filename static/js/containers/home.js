@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Chart from '../components/charts';
 import * as Actions from '../actions/index';
+import {formatPercent, formatBytes} from '../utils';
+
 
 class Home extends Component {
     static propTypes = {
@@ -14,10 +16,6 @@ class Home extends Component {
         super(props);
     }
     render() {
-        if (this.props.state.app.isLoading){
-            return (<div> SPINNER </div>); 
-
-        }
         const { actions, state} = this.props;
         const indexBloat = state.app.metrics.top_index_bloat.map((v)=> v.bloat_ratio);
         const xIndexBloat = state.app.metrics.top_index_bloat.map((v)=> v.timestamp);
@@ -29,10 +27,10 @@ class Home extends Component {
         const xTableWaste = state.app.metrics.total_table_bloat_bytes.map((v)=> v.timestamp);
         return (
             <div>
-                <Chart data={indexBloat} x={xIndexBloat}/>
-                <Chart data={indexWaste} x={xIndexWaste}/>
-                <Chart data={tableBloat} x={xTableBloat}/>
-                <Chart data={tableWaste} x={xTableWaste}/>
+                <Chart data={indexBloat} x={xIndexBloat} yMax={100} yFormatter={formatPercent}/>
+                <Chart data={indexWaste} x={xIndexWaste} yFormatter={formatBytes} />
+                <Chart data={tableBloat} x={xTableBloat} yMax={100} yFormatter={formatPercent}/>
+                <Chart data={tableWaste} x={xTableWaste} yFormatter={formatBytes}/>
             </div>
         );
     }

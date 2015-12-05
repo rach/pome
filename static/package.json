@@ -44,7 +44,8 @@
         "redux-thunk": "^1.0.0",
         "imports-loader": "^0.6.5",
         "exports-loader": "^0.6.2",
-        "whatwg-fetch": "^0.10.1"
+        "whatwg-fetch": "^0.10.1",
+        "react-loader": "^2.0.0"
     },
     "devDependencies": {
         "standard": "^5.3.1"

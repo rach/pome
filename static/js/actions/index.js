@@ -19,9 +19,11 @@ function receiveMetrics(metrics) {
     };
 }
 
-export function fetchMetrics() {
+export function fetchMetrics({update=false}={}) {
     return dispatch => {
-        dispatch(requestMetrics());
+        if(!update){
+            dispatch(requestMetrics());
+        }
         return fetch("/api/stats")
             .then(response => response.json())
             .then(json => dispatch(receiveMetrics(json)));

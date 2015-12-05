@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Chart from '../components/charts';
 import * as Actions from '../actions/index';
+import {formatPercent, formatBytes} from '../utils';
+
 
 // class ListTableBloat extends Component {
 //     propTypes = {

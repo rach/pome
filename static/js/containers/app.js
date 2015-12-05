@@ -5,7 +5,7 @@ import Chart from '../components/charts';
 import * as Actions from '../actions/index';
 import { Link } from 'react-router';
 import { pushState } from 'redux-router';
-
+import Loader from 'react-loader';
 
 
 class App extends Component {
@@ -20,10 +20,36 @@ class App extends Component {
     render() {
         return (
             <div>
-                <Link to='/'>Home</Link>
-                <Link to='/bloat/indexes'>Indexes Bloat</Link>
-                <Link to='/bloat/tables'>Tables Bloat</Link>
-                {this.props.children}  
+                <nav className="navbar navbar-light bg-faded">
+                    <div className="container">
+                        <a className="navbar-brand" href="#">Navbar</a>
+                        <ul className="nav navbar-nav">
+                            <li className="nav-item active">
+                                <Link className="nav-link" to='/'>
+                                    Home <span className="sr-only">(current)</span>
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to='/bloat/indexes' className="nav-link">
+                                    Indexes Bloat
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to='/bloat/tables' className="nav-link">
+                                    Tables Bloat
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link" href="#">About</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <div className="container">
+                    <Loader loaded={!this.props.state.app.isLoading}>
+                        {this.props.children}
+                    </Loader>
+                </div>
             </div>
         );
     }
