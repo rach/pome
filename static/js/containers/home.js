@@ -16,6 +16,8 @@ class Home extends Component {
         super(props);
     }
     render() {
+        // This should be done when we reduce the state it will avoid doing it any state
+        // change
         const { actions, state} = this.props;
         const indexBloat = state.app.metrics.top_index_bloat.map((v)=> v.bloat_ratio);
         const xIndexBloat = state.app.metrics.top_index_bloat.map((v)=> v.timestamp);
@@ -27,18 +29,25 @@ class Home extends Component {
         const xTableWaste = state.app.metrics.total_table_bloat_bytes.map((v)=> v.timestamp);
         const databaseSize = state.app.metrics.database_size.map((v)=> v.total_size);
         const xSize = state.app.metrics.database_size.map((v)=> v.timestamp);
-        const tablesSize = state.app.metrics.database_size.map((v)=> v.index_size);
+        const tablesSize = state.app.metrics.database_size.map((v)=> v.table_size);
         const indexesSize = state.app.metrics.database_size.map((v)=> v.index_size);
         const indexesRatio = state.app.metrics.database_size.map((v)=> v.index_ratio);
         return (
             <div>
                 <Chart data={indexBloat} x={xIndexBloat} yMax={100} yFormatter={formatPercent} title={"Top Bloated Index"}/>
+                <hr/>
                 <Chart data={indexWaste} x={xIndexWaste} yFormatter={formatBytes} title={"Total Bloat Index Wasted Bytes"} />
+                <hr/>
                 <Chart data={tableBloat} x={xTableBloat} yMax={100} yFormatter={formatPercent} title={"Top Bloated Table"}/>
+                <hr/>
                 <Chart data={tableWaste} x={xTableWaste} yFormatter={formatBytes} title={"Total Bloat Table Wasted Bytes"}/>
+                <hr/>
                 <Chart data={databaseSize} x={xSize} yFormatter={formatBytes} title={"Database Size"}/>
+                <hr/>
                 <Chart data={tablesSize} x={xSize} yFormatter={formatBytes} title={"Table Size"}/>
+                <hr/>
                 <Chart data={indexesSize} x={xSize} yFormatter={formatBytes} title={"Indexes Size"}/>
+                <hr/>
                 <Chart data={indexesRatio} x={xSize} yMax={100} yFormatter={formatPercent} title={"Size Index Ratio"}/>
             </div>
         );

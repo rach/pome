@@ -1,6 +1,7 @@
 import d3 from 'd3';
 import React from 'react';
 import ReactFauxDOM from 'react-faux-dom';
+import JQuery from 'jquery';
 
 class Chart extends React.Component {
     static propTypes = {
@@ -10,15 +11,16 @@ class Chart extends React.Component {
         yMax: React.PropTypes.number
     }
     render() {
+        var that = this;
         var m =  120, // number of samples per layer
             data = this.props.data,
             xdata = this.props.x,
             yMax = typeof this.props.yMax !== "undefined" ? this.props.yMax : d3.max(this.props.data);
 
-        var margin = {top: 40, right: 60, bottom: 50, left: 60},
-            width = 960 - margin.left - margin.right,
+        var margin = {top: 40, right: 10, bottom: 50, left: 60},
+            width = 910 - margin.left - margin.right,
             height = 180 - margin.top - margin.bottom;
-
+        
         var x = d3.scale.ordinal()
                 .domain(d3.range(m))
                 .rangeRoundBands([width, 0], 0.20, 0.10);
@@ -26,11 +28,15 @@ class Chart extends React.Component {
         var y = d3.scale.linear()
                 .domain([0, yMax])
                 .range([height, 0]);
+        var detail = (<span></span>);
         
         var timeFormat = d3.time.format("%I:%M %p");
+        var datetimeFormat = d3.time.format("%d/%m/%y %I:%M %p");
         const xAxisFormatter = (t) => {
                 return timeFormat(new Date(xdata[t] * 1000));
         };
+
+        const yFormatter = this.props.yFormatter;
 
         var xAxis = d3.svg.axis()
                 .scale(x)
@@ -45,7 +51,7 @@ class Chart extends React.Component {
                 .ticks(3)
                 .tickSize(0)
                 .tickPadding(6)
-                .tickFormat(this.props.yFormatter)
+                .tickFormat(yFormatter)
                 .orient("left");
         
         const node = ReactFauxDOM.createElement('svg');
@@ -61,13 +67,22 @@ class Chart extends React.Component {
                 .attr("x", function(d, i) { return x(i) + margin.left; })
                 .attr("width", x.rangeBand())
                 .attr("y", function(d) { return y(d); })
-                .attr("height", function(d) { return y(0) - y(d); });
+                .attr("height", function(d) { return y(0) - y(d); })
+                .on("mouseover", (d, i) => {
+                    //this should use action dispatch to update the state
+                    var t = datetimeFormat(new Date(xdata[i] * 1000));
+                    JQuery(React.findDOMNode(that)).find('.bar-value').text(t + " => " + yFormatter(d));
+                })
+                .on("mouseout", (d, i) => {
+                    //this should use action dispatch to update the state
+                    JQuery(React.findDOMNode(that)).find('.bar-value').text("");
+                });
 
         svg.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate("+ margin.left+"," + height + ")")
             .call(xAxis)
-            .selectAll("text")  
+            .selectAll("text")
             .attr("dx", "-.8em")
             .attr("dy", ".15em")
                 .style("text-anchor", "end")
@@ -80,7 +95,13 @@ class Chart extends React.Component {
         
         return (
             <div>
-                <h3>{this.props.title}</h3>
+                <div className="row">
+                    <div className="col-sm-8">
+                        <h3>{this.props.title}</h3>
+                    </div>
+                    <div className="col-sm-4 bar-value text-right">
+                    </div>
+                </div>
                 {node.toReact()}
             </div>
         );

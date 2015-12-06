@@ -1,0 +1,26 @@
+$navbar-padding-horizontal : 0px;
+$navbar-border-radius: 0px;
+$grid-breakpoints: (
+  // Extra small screen / phone
+  xs: 0px,
+  // Small screen / phone
+  sm: 0px,
+  // Medium screen / tablet
+  md: 0px,
+  // Large screen / desktop
+  lg: 0px,
+  // Extra large screen / wide desktop
+  xl: 992px
+) !default;
+
+
+// Grid containers
+//
+// Define the maximum width of `.container` for different screen sizes.
+
+$container-max-widths: (
+  sm: 940px,
+  md: 940px,
+  lg: 940px,
+  xl: 940px
+) !default;

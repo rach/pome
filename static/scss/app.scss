@@ -1,7 +1,23 @@
+@import "variables";
 @import "bootstrap-flex";
+
+// Sorry Bootstrap but I really don't want to deal with responsive right now!
+.container{
+    min-width: 940px;
+}
 
 nav {
     background-color: #563d7c;
+    margin-bottom: 40px;
+}
+
+.bar-value{
+    // a bit hacky, need to be en rem/em
+    font-size: 12px;
+}
+
+hr {
+    margin-bottom: 40px;
 }
 
 text {
