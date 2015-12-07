@@ -23,12 +23,12 @@ const sassLoaders = [
 
 const config = {
     entry: {
-        app: ['./js/index.js']
+        app: ['./js/index.jsx']
     },
     module: {
         loaders: [
             {
-                test: /\.js$/,
+                test: /\.jsx?$/,
                 exclude: /node_modules/,
                 loaders: ['babel-loader']
             },
@@ -55,9 +55,9 @@ const config = {
         })
     ],
     resolve: {
-        extensions: ['', '.js', '.scss', '.css'],
+        extensions: ['', '.jsx','.js', '.scss', '.css'],
         modulesDirectories: ['node_modules']
     }
 }
 
-module.exports = config
+module.exports = config;
