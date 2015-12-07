@@ -9,7 +9,7 @@ package template
 import (
 	"bytes"
 	"fmt"
-	"github.com/rach/poda/Godeps/_workspace/src/github.com/alecthomas/template/parse"
+	"github.com/rach/pom/Godeps/_workspace/src/github.com/alecthomas/template/parse"
 	"strings"
 	"testing"
 )

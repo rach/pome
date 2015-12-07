@@ -3,9 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/rach/poda/Godeps/_workspace/src/github.com/elazarl/go-bindata-assetfs"
-	"github.com/rach/poda/Godeps/_workspace/src/github.com/jmoiron/sqlx"
-	_ "github.com/rach/poda/Godeps/_workspace/src/github.com/lib/pq"
+	"github.com/rach/pom/Godeps/_workspace/src/github.com/elazarl/go-bindata-assetfs"
+	"github.com/rach/pom/Godeps/_workspace/src/github.com/jmoiron/sqlx"
+	_ "github.com/rach/pom/Godeps/_workspace/src/github.com/lib/pq"
 	"log"
 	"net/http"
 )

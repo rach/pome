@@ -5,7 +5,7 @@
 package template_test
 
 import (
-	"github.com/rach/poda/Godeps/_workspace/src/github.com/alecthomas/template"
+	"github.com/rach/pom/Godeps/_workspace/src/github.com/alecthomas/template"
 	"io"
 	"io/ioutil"
 	"log"

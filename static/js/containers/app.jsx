@@ -18,39 +18,39 @@ class App extends Component {
         super(props);
     }
     render() {
-        return (
-            <div>
-                <nav className="navbar navbar-dark">
-                    <div className="container">
-                        <a className="navbar-brand" href="#">Poda</a>
-                        <ul className="nav navbar-nav">
-                            <li className="nav-item active">
-                                <Link className="nav-link" to='/'>
-                                    Overview <span className="sr-only">(current)</span>
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link to='/bloat/indexes' className="nav-link">
-                                    Indexes Bloat
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link to='/bloat/tables' className="nav-link">
-                                    Tables Bloat
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">About</a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-                <div className="container">
-                    <Loader loaded={!this.props.state.app.isLoading}>
-                        {this.props.children}
-                    </Loader>
-                </div>
+      return (
+        <div>
+          <nav className="navbar navbar-dark">
+            <div className="container">
+              <a className="navbar-brand" href="#">Pom</a>
+              <ul className="nav navbar-nav">
+                <li className="nav-item active">
+                  <Link className="nav-link" to='/'>
+                    Overview <span className="sr-only">(current)</span>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to='/bloat/indexes' className="nav-link">
+                    Indexes Bloat
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to='/bloat/tables' className="nav-link">
+                    Tables Bloat
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="#">About</a>
+                </li>
+              </ul>
             </div>
+          </nav>
+          <div className="container">
+            <Loader loaded={!this.props.state.app.isLoading}>
+              {this.props.children}
+            </Loader>
+          </div>
+        </div>
         );
     }
 }

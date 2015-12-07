@@ -24,8 +24,8 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/rach/poda/Godeps/_workspace/src/github.com/jmoiron/sqlx/reflectx"
-	_ "github.com/rach/poda/Godeps/_workspace/src/github.com/lib/pq"
+	"github.com/rach/pom/Godeps/_workspace/src/github.com/jmoiron/sqlx/reflectx"
+	_ "github.com/rach/pom/Godeps/_workspace/src/github.com/lib/pq"
 )
 
 /* compile time checks that Db, Tx, Stmt (qStmt) implement expected interfaces */
