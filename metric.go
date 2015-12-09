@@ -95,9 +95,11 @@ func indexBloatUpdate(db *sqlx.DB, metrics *MetricList, datafct databaseResultFc
 
 	// iterate over each row
 	for _, v := range results {
+		if v.Schema == "information_schema" {
+			continue
+		}
 		total_bytes += v.BloatBytes
 		top_bloat = math.Max(top_bloat, v.BloatRatio)
-
 		initMapMetric(
 			v.Key,
 			&((*metrics).IndexBloat),
@@ -129,6 +131,9 @@ func tableBloatUpdate(db *sqlx.DB, metrics *MetricList, datafct databaseResultFc
 
 	// iterate over each row
 	for _, v := range results {
+		if v.Schema == "information_schema" {
+			continue
+		}
 		total_bytes += v.BloatBytes
 		top_bloat = math.Max(top_bloat, v.BloatRatio)
 
