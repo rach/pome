@@ -3,37 +3,49 @@
 
 // Sorry Bootstrap but I really don't want to deal with responsive right now!
 .container{
-    min-width: 940px;
+  min-width: 940px;
 }
 
 nav {
-    background-color: #563d7c;
-    margin-bottom: 40px;
+  background-color: #563d7b;
+  margin-bottom: 40px;
+}
+
+footer {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #9D84C2;
+  font-size: 0.8em;
+  color: rgba(255,255,255,0.6);
+  margin-top: 50px;
+}
+
+.content{
+  min-height: 800px;
 }
 
 .bar-value{
-    // a bit hacky, need to be en rem/em
-    font-size: 12px;
+  font-size: 0.8em;
 }
 
 hr {
-    margin-bottom: 40px;
+  margin-bottom: 40px;
 }
 
 text {
-    font: 10px sans-serif;
+  font: 10px sans-serif;
 }
 
 .axis path,
 .axis line {
-    fill: none;
-    stroke: #000;
-    shape-rendering: crispEdges;
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
 }
 
 rect {
-    fill: #aad;
-    &:hover{
-      fill: darken(#aad, 10%);
-    }
+  fill: #9D84C2;
+  &:hover{
+    fill: #7251A4;
+  }
 }

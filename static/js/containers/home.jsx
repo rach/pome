@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import Chart from '../components/charts';
 import * as Actions from '../actions/index';
 import {formatPercent, formatBytes} from '../utils';
+import filesize from 'filesize';
 
 
 class Home extends Component {
@@ -18,7 +19,7 @@ class Home extends Component {
     render() {
         // This should be done when we reduce the state it will avoid doing it any state
         // change
-        const { actions, state} = this.props;
+        const {state} = this.props;
         const indexBloat = state.app.metrics.top_index_bloat.map((v)=> v.bloat_ratio);
         const xIndexBloat = state.app.metrics.top_index_bloat.map((v)=> v.timestamp);
         const indexWaste = state.app.metrics.total_index_bloat_bytes.map((v)=> v.bloat_bytes);
@@ -36,17 +37,17 @@ class Home extends Component {
             <div>
                 <Chart data={indexBloat} x={xIndexBloat} yMax={100} yFormatter={formatPercent} title={"Top Bloated Index"}/>
                 <hr/>
-                <Chart data={indexWaste} x={xIndexWaste} yFormatter={formatBytes} title={"Total Bloat Index Wasted Bytes"} />
+                <Chart data={indexWaste} x={xIndexWaste} yFormatter={filesize} title={"Total Bloat Index Wasted Bytes"} />
                 <hr/>
                 <Chart data={tableBloat} x={xTableBloat} yMax={100} yFormatter={formatPercent} title={"Top Bloated Table"}/>
                 <hr/>
-                <Chart data={tableWaste} x={xTableWaste} yFormatter={formatBytes} title={"Total Bloat Table Wasted Bytes"}/>
+                <Chart data={tableWaste} x={xTableWaste} yFormatter={filesize} title={"Total Bloat Table Wasted Bytes"}/>
                 <hr/>
-                <Chart data={databaseSize} x={xSize} yFormatter={formatBytes} title={"Database Size"}/>
+                <Chart data={databaseSize} x={xSize} yFormatter={filesize} title={"Database Size"}/>
                 <hr/>
-                <Chart data={tablesSize} x={xSize} yFormatter={formatBytes} title={"Table Size"}/>
+                <Chart data={tablesSize} x={xSize} yFormatter={filesize} title={"Table Size"}/>
                 <hr/>
-                <Chart data={indexesSize} x={xSize} yFormatter={formatBytes} title={"Indexes Size"}/>
+                <Chart data={indexesSize} x={xSize} yFormatter={filesize} title={"Indexes Size"}/>
                 <hr/>
                 <Chart data={indexesRatio} x={xSize} yMax={100} yFormatter={formatPercent} title={"Size Index Ratio"}/>
             </div>

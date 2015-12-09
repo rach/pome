@@ -18,38 +18,59 @@ class App extends Component {
         super(props);
     }
     render() {
+      var path = this.props.state.router.location.pathname;
       return (
         <div>
           <nav className="navbar navbar-dark">
             <div className="container">
-              <a className="navbar-brand" href="#">Pom</a>
+              <Link to='/' className="navbar-brand">
+                Pom 
+              </Link>
               <ul className="nav navbar-nav">
-                <li className="nav-item active">
-                  <Link className="nav-link" to='/'>
-                    Overview <span className="sr-only">(current)</span>
-                  </Link>
-                </li>
-                <li className="nav-item">
+                <li className={path == "/bloat/indexes" ? "nav-item active" : "nav-item"}>
                   <Link to='/bloat/indexes' className="nav-link">
                     Indexes Bloat
+                    {(() => {
+                       if (path == '/bloat/indexes') {
+                         return <span className="sr-only">(current)</span>
+                       }
+                     })()}
                   </Link>
                 </li>
-                <li className="nav-item">
+                <li className={path == "/bloat/tables" ? "nav-item active" : "nav-item"}>
                   <Link to='/bloat/tables' className="nav-link">
                     Tables Bloat
+                    {(() => {
+                       if (path == '/bloat/tables') {
+                         return <span className="sr-only">(current)</span>
+                       }
+                     })()}
                   </Link>
                 </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#">About</a>
+                <li className={path == "/about" ? "nav-item active" : "nav-item"}>
+                  <Link to='/bloat/tables' className="nav-link">
+                    About
+                    {(() => {
+                       if (path == '/about') {
+                         return <span className="sr-only">(current)</span>
+                       }
+                     })()}
+                  </Link>
                 </li>
               </ul>
             </div>
           </nav>
-          <div className="container">
+          <div className="container content">
             <Loader loaded={!this.props.state.app.isLoading}>
               {this.props.children}
             </Loader>
           </div>
+          <footer className="footer">
+            <div className="container text-right">
+              © Copyright 2015, Rachid Belaid <br/>
+              Pom is licensed under the Apache License, Version 2.0
+            </div>
+          </footer>
         </div>
         );
     }
