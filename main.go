@@ -7,6 +7,10 @@ import (
 
 //go:generate go-bindata -prefix "static/" -pkg main -o bindata.go static/index.html static/build/...
 
+const (
+	Version = "0.1.0"
+)
+
 var (
 	app  = kingpin.New("pom", "A Postgres Monitoring Tool.")
 	host = app.Flag("host", "database server host (default: localhost)").
@@ -22,7 +26,7 @@ var (
 
 func parseCmdLine(args []string) (command string, err error) {
 	//this is isolated from the main() function to make it more testable
-	app.Version("0.1.0")
+	app.Version(Version)
 	return app.Parse(args)
 }
 
