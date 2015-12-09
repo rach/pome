@@ -1,5 +1,5 @@
 .tern-port
 node_modules
 static/build/
-/poda
-/poda.test
+/pom
+/pom.test
