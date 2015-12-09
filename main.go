@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/rach/pom/Godeps/_workspace/src/github.com/alecthomas/kingpin"
+	"log"
 	"os"
 )
 
@@ -40,5 +41,7 @@ func main() {
 	go metricScheduler(db, &metrics, tableBloatUpdate, GetTableBloatResult, 12*60*60, 120)
 	go metricScheduler(db, &metrics, databaseSizeUpdate, GetDatabeSizeResult, 60*60, 120)
 	go metricScheduler(db, &metrics, numberOfConnectionUpdate, GetNumberOfConnectionResult, 5*60, 120)
+	log.Printf("Starting Pom %s", Version)
+	log.Printf("Application will be available at http://127.0.0.1:%d", *port)
 	initWebServer(context)
 }
