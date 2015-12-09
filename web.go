@@ -1,20 +1,25 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"github.com/rach/pom/Godeps/_workspace/src/github.com/elazarl/go-bindata-assetfs"
 	"github.com/rach/pom/Godeps/_workspace/src/github.com/jmoiron/sqlx"
 	_ "github.com/rach/pom/Godeps/_workspace/src/github.com/lib/pq"
+	"io"
 	"log"
 	"net/http"
 )
 
 func metricsHandler(a *appContext, w http.ResponseWriter, r *http.Request) (int, error) {
-	// Our handlers now have access to the members of our context struct.
-	// e.g. we can call methods on our DB type via err := a.db.GetPosts()
-	v, _ := json.Marshal(a.metrics)
-	fmt.Fprintf(w, string(v))
+	js, err := json.Marshal(a.metrics)
+	if err != nil {
+		return 500, err
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(js)
 	return 200, nil
 }
 
@@ -30,10 +35,22 @@ type appHandler struct {
 
 func initWebServer(context *appContext) {
 	http.Handle("/api/stats", appHandler{context, metricsHandler})
+	http.HandleFunc("/about", aliasHandler)
+	http.HandleFunc("/bloat/indexes", aliasHandler)
+	http.HandleFunc("/bloat/tables", aliasHandler)
 	http.Handle("/",
 		http.FileServer(
 			&assetfs.AssetFS{Asset: Asset, AssetDir: AssetDir, Prefix: ""}))
 	http.ListenAndServe(fmt.Sprintf(":%d", *port), nil)
+}
+
+func aliasHandler(rw http.ResponseWriter, req *http.Request) {
+	if bs, err := Asset("index.html"); err != nil {
+		rw.WriteHeader(http.StatusNotFound)
+	} else {
+		var reader = bytes.NewBuffer(bs)
+		io.Copy(rw, reader)
+	}
 }
 
 func (ah appHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
