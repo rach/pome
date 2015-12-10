@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rach/pom/Godeps/_workspace/src/github.com/alecthomas/units"
+	"github.com/rach/pome/Godeps/_workspace/src/github.com/alecthomas/units"
 )
 
 // NOTE: Most of the base type values were lifted from:

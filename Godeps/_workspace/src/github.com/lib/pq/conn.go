@@ -22,7 +22,7 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/rach/pom/Godeps/_workspace/src/github.com/lib/pq/oid"
+	"github.com/rach/pome/Godeps/_workspace/src/github.com/lib/pq/oid"
 )
 
 // Common error types

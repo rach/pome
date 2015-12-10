@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/rach/pom/Godeps/_workspace/src/github.com/jmoiron/sqlx"
-	_ "github.com/rach/pom/Godeps/_workspace/src/github.com/lib/pq"
+	"github.com/rach/pome/Godeps/_workspace/src/github.com/jmoiron/sqlx"
+	_ "github.com/rach/pome/Godeps/_workspace/src/github.com/lib/pq"
 	"log"
 )
 

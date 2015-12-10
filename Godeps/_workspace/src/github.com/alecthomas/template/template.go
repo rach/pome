@@ -6,7 +6,7 @@ package template
 
 import (
 	"fmt"
-	"github.com/rach/pom/Godeps/_workspace/src/github.com/alecthomas/template/parse"
+	"github.com/rach/pome/Godeps/_workspace/src/github.com/alecthomas/template/parse"
 	"reflect"
 )
 

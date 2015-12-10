@@ -24,7 +24,7 @@ class App extends Component {
           <nav className="navbar navbar-dark">
             <div className="container">
               <Link to='/' className="navbar-brand">
-                Pom 
+                Pome 
               </Link>
               <ul className="nav navbar-nav">
                 <li className={path == "/bloat/indexes" ? "nav-item active" : "nav-item"}>
@@ -68,7 +68,7 @@ class App extends Component {
           <footer className="footer">
             <div className="container text-right">
               © Copyright 2015, Rachid Belaid <br/>
-              Pom is licensed under the Apache License, Version 2.0
+              Pome is licensed under the Apache License, Version 2.0
             </div>
           </footer>
         </div>

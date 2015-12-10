@@ -7,7 +7,7 @@ package template
 import (
 	"bytes"
 	"fmt"
-	"github.com/rach/pom/Godeps/_workspace/src/github.com/alecthomas/template/parse"
+	"github.com/rach/pome/Godeps/_workspace/src/github.com/alecthomas/template/parse"
 	"io"
 	"reflect"
 	"runtime"
