@@ -82,6 +82,8 @@ func GetDatabeSizeResult(db *sqlx.DB) interface{} {
 	return r
 }
 
+// Modified Query from:
+// https://gist.github.com/gullevek/32881d6b4c5b1ed0135c
 const (
 	IndexBloatSql = `
 WITH btree_index_atts AS (
@@ -167,6 +169,9 @@ SELECT  nspname || '.' || tablename || '.' || index_name AS key,
 FROM raw_bloat
 ORDER BY wastedbytes DESC;
 `
+
+	// Modified Query form
+	// https://github.com/ioguix/pgsql-bloat-estimation/blob/master/table/table_bloat.sql
 
 	TableBloatSql = `
 SELECT schemaname || '.' || tblname AS key, schemaname as schema, tblname as table,
