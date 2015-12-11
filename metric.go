@@ -16,6 +16,7 @@ type MetricList struct {
 	TotalIndexBloatBytes []Metric          `json:"total_index_bloat_bytes"`
 	DatabaseSize         []Metric          `json:"database_size"`
 	NumberOfConnection   []Metric          `json:"number_of_connection"`
+	Version              string            `json:"version"`
 }
 
 type metricFct func(db *sqlx.DB, metrics *MetricList, datafct databaseResultFct, limit int)

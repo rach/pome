@@ -32,26 +32,16 @@ class App extends Component {
                     Indexes Bloat
                     {(() => {
                        if (path == '/bloat/indexes') {
-                         return <span className="sr-only">(current)</span>
+                         return <span className="sr-only">(current)</span>;
                        }
                      })()}
                   </Link>
                 </li>
                 <li className={path == "/bloat/tables" ? "nav-item active" : "nav-item"}>
-                  <Link to='/bloat/tables' className="nav-link">
+                   <Link to='/bloat/tables' className="nav-link">
                     Tables Bloat
                     {(() => {
                        if (path == '/bloat/tables') {
-                         return <span className="sr-only">(current)</span>
-                       }
-                     })()}
-                  </Link>
-                </li>
-                <li className={path == "/about" ? "nav-item active" : "nav-item"}>
-                  <Link to='/bloat/tables' className="nav-link">
-                    About
-                    {(() => {
-                       if (path == '/about') {
                          return <span className="sr-only">(current)</span>
                        }
                      })()}
@@ -66,9 +56,16 @@ class App extends Component {
             </Loader>
           </div>
           <footer className="footer">
-            <div className="container text-right">
-              © Copyright 2015, Rachid Belaid <br/>
-              Pome is licensed under the Apache License, Version 2.0
+            <div className="container">
+              <div className="row">
+                <div className="col-sm-6">
+                  Version {this.props.state.app.isLoading? '?' : this.props.state.app.metrics.version}
+                </div>
+                <div className="col-sm-6 text-right">
+                  © Copyright 2015, Rachid Belaid <br/>
+                  Pome is licensed under the Apache License, Version 2.0
+                </div>
+              </div>
             </div>
           </footer>
         </div>

@@ -33,7 +33,7 @@ func parseCmdLine(args []string) (command string, err error) {
 
 func main() {
 	kingpin.MustParse(parseCmdLine(os.Args[1:]))
-	var metrics = MetricList{}
+	var metrics = MetricList{Version: Version}
 	var connstring = connectionString(*host, *database, *username, *password)
 	db := connectDB(connstring)
 	context := &appContext{db, &metrics}
