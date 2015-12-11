@@ -48,6 +48,7 @@ If you've database is protected by a password then you need to pass it via comma
 
 Once Pome is running, you can access the dashboard via your browser and you should see an interface like this:
 
+![Home screenshot](https://raw.githubusercontent.com/rach/pome/master/screenshots/home.png)
 
 ##Which metrics does Pome provide
 
