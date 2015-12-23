@@ -1,22 +1,21 @@
 #Pome
 Pome stands for **Po**sgres **Me**trics.
 Pome is a PosgreSQL Metrics Dashboard to keep track of the health of your database.
-This project is at a very early stage and there are a lot of missing features but I'm hoping to be able to make
-the project progressing quickly.
+This project is at a very early stage and there are a lot of missing features,
+but I'm hoping to be able to make the project progress quickly.
 
 ##How to install Pome
 
-We don't yet provide pre-build binaries of Pome so you need to use the go packaging system got now.
-To install Pom, if you have go install then you can do it via the `go get` command:
+Pome is not yet providing pre-built binaries, so you need to use the Go packaging system for now.
+To install Pome, you must have Go installed so you can use the `go get` command:
 
     go get github.com/rach/pome
    
-You can also use `go get` to update it:
+You can also use `go get` to update Pome:
 
     go get -u github.com/rach/pome
 
-To be able to use `go get`, you need to have Go installed.
-Your OS may allow to install via the packaging system you can refer to the Go [documentation](https://golang.org/doc/install) 
+To install Go, you can follow the Go [documentation](https://golang.org/doc/install) or use your internal packaging system. 
 
 ##How to run Pome
 
@@ -38,15 +37,16 @@ The command line provides some help on how to use Pome:
     Args:
       <DBNAME>
 
-If your database doesn't have a password set then you can run Pome like this:
+If your database doesn't have a password set, then you can run Pome like this:
 
      $> pome -U myuser mydatabase
      2015/12/09 12:09:43 Starting Pome 0.1.0
      2015/12/09 12:09:43 Application will be available at http://127.0.0.1:2345
 
-If you've database is protected by a password then you need to pass it via command line. It's going to be fixed and there is an issue [exist](https://github.com/rach/pome/issues/16) for this.
+If you've database is protected by a password, then you need to pass it as an argument.
+In the future, Pome will prompt the user for the password (see this [issue](https://github.com/rach/pome/issues/16)).
 
-Once Pome is running, you can access the dashboard via your browser and you should see an interface like this:
+Once Pome is running, you can access the dashboard via your browser, and you should see an interface like this:
 
 ![Home screenshot](https://raw.githubusercontent.com/rach/pome/master/screenshots/home.png)
 
@@ -65,7 +65,7 @@ Right now, Pome collects the following metrics:
 - The bloat ratio on individual table and indexes
 - Wasted bytes per table
 
-There are a lot of other metrics will be added soon like:
+There are a lot of other metrics that will be added soon, like:
 
 - Unused indexes
 - Cache hit ratio
@@ -74,13 +74,14 @@ There are a lot of other metrics will be added soon like:
 - Numbers of query longer than 5s and 5min
 - Etc 
 
-If you are interested about monitoring CPU, disk IO ... This will need to be done via another tool.
-Pome will be only collecting data which can be gathered through Postgres 
+If you are interested in monitoring CPU, disk IO ... This will need to be done via another tool.
+Pome will only be collecting data which can be gathered through Postgres 
 
 ##Why building Pome 
 ### Context
 
-PostgreSQL is incredibly stable, especially with small databases and you see too often databases in the wild without the care of a loving DBA. It can give the illusion that everything is alright when your database is slowly getting worst. 
+PostgreSQL is incredibly stable, especially with small databases. You too often see databases in the wild without the care of a loving DBA.
+It can give the illusion that everything is alright when your database is slowly getting worse.
 
 ### Goals
 
@@ -97,24 +98,6 @@ Batteries Included, Pome is built to be accessed via a web interface. The web ap
 Pome isn't aiming to be a tool for humongous Postgres instances which are already in the hands of DBA who can have the time setup more advanced monitoring tool. Pome won't be an alternative to a more configurable tool like collectd.
 
 
-##What does Pome provide
-
-- Database size
-- Tables size
-- Indexes size
-- Number of Connections
-- Total of wasted bytes due to bloat for tables and indexes
-- Overview of Bloat ration on individual table and indexes
-
-There is a lot of other metrics to add and they are planned like:
-- unused indexes
-- cache hit ratio
-- amount of wal files
-- Transaction per second
-- Numbers of query longer than 5s and 5min
-
-If you want to monitor CPU, disk usage ... this need will need to be done via other tools. Pome will be only gathering stats which gather through Postgres
-
 ##Can I use Pome in Production
 
 If the database is heavily used then I would avoid it for now until we get more load testing and more configuration options. 
@@ -123,6 +106,11 @@ If the database is heavily used then I would avoid it for now until we get more 
 
 The tool has been developed and tested against PG 9.4 and it should be working on the future version.
 Pome don't have the intent to support older versions because it may require to have differents SQL statement for a different version but if there is some requests it will be considered.
+
+##Running the tests
+
+createuser suma
+createdb suma_test --owner suma
 
 ##Stateless
 
@@ -161,4 +149,4 @@ Pome has a differents goals than the tool above.
 
 ##Licence 
 
-Pome is licensed under Apache V2 license, the full license text can be found [here](https://github.com/rach/pom/blob/master/LICENSE)
+Pome is licensed under Apache V2 license, the full license text can be found [here](https://github.com/rach/pome/blob/master/LICENSE)
