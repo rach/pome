@@ -6,7 +6,7 @@ but I'm hoping to be able to make the project progress quickly.
 
 ##How to install Pome
 
-Pome is not yet providing pre-built binaries, so you need to use the Go packaging system for now.
+Pome does not yet provide pre-built binaries, so you need to use the Go packaging system for now.
 To install Pome, you must have Go installed so you can use the `go get` command:
 
     go get github.com/rach/pome
@@ -81,7 +81,7 @@ Pome will only be collecting data which can be gathered through Postgres
 ### Context
 
 PostgreSQL is incredibly stable, especially with small databases. You too often see databases in the wild without the care of a loving DBA.
-It can give the illusion that everything is alright when your database is slowly getting worse.
+It can give the illusion that everything is alright when your database is slowly getting worse. A lot of things can be analyzed within postgres to get an health status but sadly it misses simple tool to use for less expert people.
 
 ### Goals
 
@@ -95,7 +95,7 @@ Batteries Included, Pome is built to be accessed via a web interface. The web ap
 
 ### Why Pome is not and won't be
 
-Pome isn't aiming to be a tool for humongous Postgres instances which are already in the hands of DBA who can have the time setup more advanced monitoring tool. Pome won't be an alternative to a more configurable tool like collectd.
+Pome isn't aiming to be a tool for humongous Postgres instances which are already in the hands of a DBA who can have the time to setup more advanced monitoring tools. Pome won't be an alternative to a more configurable tool like collectd.
 
 
 ##Can I use Pome in Production
@@ -105,12 +105,7 @@ If the database is heavily used then I would avoid it for now until we get more 
 ##Supported PostgreSQL Versions
 
 The tool has been developed and tested against PG 9.4 and it should be working on the future version.
-Pome don't have the intent to support older versions because it may require to have differents SQL statement for a different version but if there is some requests it will be considered.
-
-##Running the tests
-
-createuser suma
-createdb suma_test --owner suma
+Pome doesn't have the intent to support older versions because it may require to have differents SQL statement for a different version but if there are some requests it will be considered.
 
 ##Stateless
 
@@ -123,9 +118,9 @@ Let see where Pome goes, so that may change.
 
 ##Contributing 
 
-This project had also some learning motivation as I had never written a Go project and hadn't touched react for a while. I may have done some mistakes or didn't follow some good practice for which I would appreciate some feedbacks.
+This project had also some learning motivation, as I had never written a Go project and hadn't touched react for a while. I may have made some mistakes or didn't follow some good practice for which I would appreciate some feedbacks.
 
-Otherwise, there are few tasks which can be done if you want to help: 
+Otherwise, there are a few tasks which can be done if you want to help
 
 - Suggesting new metrics
 - Testing the tools and submit issues
@@ -137,7 +132,7 @@ Both languages uses are not my daily programming language so I probably did begi
 
 ##Inspirations
 
-When Pome was only a rough idea, I checked online what was already existing and I found few similar projects which inspired me: 
+When Pome was only a rough idea, I checked online what already existed and I found a few similar projects which inspired me:
 
 - [postgresql-metrics](https://github.com/spotify/postgresql-metrics) from Spotify
 - [pg_diagnose](https://github.com/heroku/pgdiagnose) from Heroku
@@ -145,7 +140,7 @@ When Pome was only a rough idea, I checked online what was already existing and 
 - Bucardo [check_postgres](https://bucardo.org/check_postgres/)
 - RethinkDB dashboard
 
-Pome has a differents goals than the tool above.
+Pome has a different goal to the tools above.
 
 ##Licence 
 
