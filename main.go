@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"github.com/rach/pome/Godeps/_workspace/src/github.com/alecthomas/kingpin"
 	"log"
 	"os"
+	"os/user"
 )
 
 //go:generate go-bindata -prefix "static/" -pkg main -o bindata.go static/index.html static/build/...
@@ -11,6 +13,16 @@ import (
 const (
 	Version = "0.1.0"
 )
+
+func addUsernameFlag(app *kingpin.Application) *string {
+	u, err := user.Current()
+	if err != nil {
+		return app.Flag("username", "").Short('U').
+			PlaceHolder("USERNAME").Required().String()
+	}
+	return app.Flag("username", "").Short('U').Default(u.Username).
+		PlaceHolder(fmt.Sprintf("USERNAME (default: %s)", u.Username)).String()
+}
 
 var (
 	app  = kingpin.New("pome", "A Postgres Metrics Dashboard.")
@@ -20,8 +32,7 @@ var (
 		Short('p').Default("2345").PlaceHolder("PORT").Int()
 	password = app.Flag("password", "").
 			Short('W').PlaceHolder("PASSWORD").String()
-	username = app.Flag("username", "").
-			Short('U').PlaceHolder("USERNAME").Required().String()
+	username = addUsernameFlag(app)
 	database = app.Arg("DBNAME", "").Required().String()
 )
 
