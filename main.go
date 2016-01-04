@@ -30,8 +30,7 @@ var (
 		Short('h').PlaceHolder("HOSTNAME").Default("localhost").String()
 	port = app.Flag("port", "database server port (default: 2345)").
 		Short('p').Default("2345").PlaceHolder("PORT").Int()
-	password = app.Flag("password", "").
-			Short('W').PlaceHolder("PASSWORD").String()
+	password = app.Flag("password", "").Short('W').Bool()
 	username = addUsernameFlag(app)
 	database = app.Arg("DBNAME", "").Required().String()
 )
@@ -45,7 +44,12 @@ func parseCmdLine(args []string) (command string, err error) {
 func main() {
 	kingpin.MustParse(parseCmdLine(os.Args[1:]))
 	var metrics = MetricList{Version: Version}
-	var connstring = connectionString(*host, *database, *username, *password)
+	pwd := ""
+	if *password {
+		fmt.Print("Enter Password: ")
+		fmt.Scanln(&pwd)
+	}
+	var connstring = connectionString(*host, *database, *username, pwd)
 	db := connectDB(connstring)
 	context := &appContext{db, &metrics}
 	go metricScheduler(db, &metrics, indexBloatUpdate, GetIndexBloatResult, 12*60*60, 120)
