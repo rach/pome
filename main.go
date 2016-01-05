@@ -30,6 +30,8 @@ var (
 		Short('h').PlaceHolder("HOSTNAME").Default("localhost").String()
 	port = app.Flag("port", "database server port (default: 2345)").
 		Short('p').Default("2345").PlaceHolder("PORT").Int()
+	sslmode = app.Flag("sslmode", "database SSL mode (default: disabled)").
+		Short('s').Default("disabled").PlaceHolder("SSLMODE").String()
 	password = app.Flag("password", "").Short('W').Bool()
 	username = addUsernameFlag(app)
 	database = app.Arg("DBNAME", "").Required().String()
@@ -49,7 +51,7 @@ func main() {
 		fmt.Print("Enter Password: ")
 		fmt.Scanln(&pwd)
 	}
-	var connstring = connectionString(*host, *database, *username, pwd)
+	var connstring = connectionString(*host, *database, *username, pwd, *sslmode)
 	db := connectDB(connstring)
 	context := &appContext{db, &metrics}
 	go metricScheduler(db, &metrics, indexBloatUpdate, GetIndexBloatResult, 12*60*60, 120)
