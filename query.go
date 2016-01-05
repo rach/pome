@@ -12,9 +12,9 @@ func connectDB(dbURL string) *sqlx.DB {
 	return db
 }
 
-func connectionString(host string, dbname string, username string, password string) string {
+func connectionString(host string, dbname string, username string, password string, sslmode string) string {
 	// TODO: escape single quote
-	return fmt.Sprintf("host='%s' dbname='%s' user='%s' password='%s' sslmode=disable", host, dbname, username, password)
+	return fmt.Sprintf("host='%s' dbname='%s' user='%s' password='%s' sslmode='%s'", host, dbname, username, password, sslmode)
 }
 
 type IndexBloatDatabaseResult struct {

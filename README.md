@@ -31,6 +31,7 @@ The command line provides some help on how to use Pome:
          --help               Show context-sensitive help (also try --help-long and --help-man).
      -h, --host=HOSTNAME      database server host (default: localhost)
      -p, --port=PORT          database server port (default: 2345)
+     -s, --sslmode=require    database SSL mode (default: disable)
      -W, --password=PASSWORD
      -U, --username=USERNAME
          --version            Show application version.
