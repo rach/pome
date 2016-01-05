@@ -30,8 +30,8 @@ var (
 		Short('h').PlaceHolder("HOSTNAME").Default("localhost").String()
 	port = app.Flag("port", "database server port (default: 2345)").
 		Short('p').Default("2345").PlaceHolder("PORT").Int()
-	sslmode = app.Flag("sslmode", "database SSL mode (default: disabled)").
-		Short('s').Default("disabled").PlaceHolder("SSLMODE").String()
+	sslmode = app.Flag("sslmode", "database SSL mode (default: disable)").
+		Short('s').Default("disable").PlaceHolder("SSLMODE").String()
 	password = app.Flag("password", "").Short('W').Bool()
 	username = addUsernameFlag(app)
 	database = app.Arg("DBNAME", "").Required().String()
