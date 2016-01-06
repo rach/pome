@@ -46,12 +46,12 @@ type topBloatRatioMetric struct {
 
 type totalBloatBytesMetric struct {
 	Timestamp  int64 `json:"timestamp"`
-	BloatBytes int   `json:"bloat_bytes"`
+	BloatBytes int64 `json:"bloat_bytes"`
 }
 
 type bloatMetric struct {
 	Timestamp  int64   `json:"timestamp"`
-	BloatBytes int     `json:"bloat_bytes"`
+	BloatBytes int64   `json:"bloat_bytes"`
 	BloatRatio float64 `json:"bloat_ratio"`
 }
 type tableBloatMetric struct {
@@ -91,7 +91,7 @@ func initMapMetric(key string, vm *map[string]Metric, metric Metric) {
 func indexBloatUpdate(db *sqlx.DB, metrics *MetricList, datafct databaseResultFct, limit int) {
 	timestamp := GetTimestamp()
 	results := (datafct(db)).([]IndexBloatDatabaseResult)
-	var total_bytes int = 0
+	var total_bytes int64 = 0
 	var top_bloat float64 = 0
 
 	// iterate over each row
@@ -127,7 +127,7 @@ func indexBloatUpdate(db *sqlx.DB, metrics *MetricList, datafct databaseResultFc
 func tableBloatUpdate(db *sqlx.DB, metrics *MetricList, datafct databaseResultFct, limit int) {
 	timestamp := GetTimestamp()
 	results := (datafct(db)).([]TableBloatDatabaseResult)
-	var total_bytes int = 0
+	var total_bytes int64 = 0
 	var top_bloat float64 = 0
 
 	// iterate over each row

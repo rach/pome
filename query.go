@@ -22,7 +22,7 @@ type IndexBloatDatabaseResult struct {
 	Schema     string  `db:"schema"`
 	Table      string  `db:"table"`
 	Index      string  `db:"index"`
-	BloatBytes int     `db:"bloat_bytes"`
+	BloatBytes int64   `db:"bloat_bytes"`
 	BloatRatio float64 `db:"bloat_ratio"`
 }
 
@@ -40,7 +40,7 @@ type TableBloatDatabaseResult struct {
 	Key        string  `db:"key"`
 	Schema     string  `db:"schema"`
 	Table      string  `db:"table"`
-	BloatBytes int     `db:"bloat_bytes"`
+	BloatBytes int64   `db:"bloat_bytes"`
 	BloatRatio float64 `db:"bloat_ratio"`
 }
 
