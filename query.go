@@ -236,22 +236,22 @@ SELECT numbackends as num_connections FROM pg_stat_database WHERE datname = curr
 `
 
 	DatabaseSizeSql = `
-SELECT
-    SUM(table_size) AS table_size,
-    SUM(indexes_size) AS index_size,
-    SUM(total_size) AS total_size,
-    round(100 * SUM(indexes_size)/SUM(total_size), 1) as index_ratio
-FROM (
-    SELECT
-        table_name,
-        pg_table_size(table_name) AS table_size,
-        pg_indexes_size(table_name) AS indexes_size,
-        pg_total_relation_size(table_name) AS total_size
-    FROM (
-        SELECT ('"' || table_schema || '"."' || table_name || '"') AS table_name
-        FROM information_schema.tables
-    ) AS all_tables
-    ORDER BY total_size DESC
-) AS pretty_sizes;
-`
+ SELECT
+     SUM(table_size)::bigint AS table_size,
+     SUM(indexes_size)::bigint AS index_size,
+     SUM(total_size)::bigint AS total_size,
+     round(100 * SUM(indexes_size)/SUM(total_size), 1) as index_ratio
+ FROM (
+     SELECT
+         table_name,
+         pg_table_size(table_name) AS table_size,
+         pg_indexes_size(table_name) AS indexes_size,
+         pg_total_relation_size(table_name) AS total_size
+     FROM (
+         SELECT ('"' || table_schema || '"."' || table_name || '"') AS table_name
+         FROM information_schema.tables
+     ) AS all_tables
+     ORDER BY total_size DESC
+ ) AS pretty_sizes;
+ `
 )
