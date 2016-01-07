@@ -47,6 +47,9 @@ type TableBloatDatabaseResult struct {
 type databaseResultFct func(db *sqlx.DB) interface{}
 
 func GetIndexBloatResult(db *sqlx.DB) interface{} {
+	if *verbose {
+		log.Printf("Fetch Indexes Bloat")
+	}
 	r := []IndexBloatDatabaseResult{}
 	err := db.Select(&r, IndexBloatSql)
 	if err != nil {
@@ -56,6 +59,9 @@ func GetIndexBloatResult(db *sqlx.DB) interface{} {
 }
 
 func GetTableBloatResult(db *sqlx.DB) interface{} {
+	if *verbose {
+		log.Printf("Fetch Tables Bloat")
+	}
 	r := []TableBloatDatabaseResult{}
 	err := db.Select(&r, TableBloatSql)
 	if err != nil {
@@ -65,6 +71,9 @@ func GetTableBloatResult(db *sqlx.DB) interface{} {
 }
 
 func GetNumberOfConnectionResult(db *sqlx.DB) interface{} {
+	if *verbose {
+		log.Printf("Fetch Number of Connections")
+	}
 	r := NumberOfConnectionResult{}
 	err := db.Get(&r, NumberOfConnectionSql)
 	if err != nil {
@@ -74,6 +83,9 @@ func GetNumberOfConnectionResult(db *sqlx.DB) interface{} {
 }
 
 func GetDatabeSizeResult(db *sqlx.DB) interface{} {
+	if *verbose {
+		log.Printf("Fetch Database Size")
+	}
 	r := DatabaseSizeResult{}
 	err := db.Get(&r, DatabaseSizeSql)
 	if err != nil {

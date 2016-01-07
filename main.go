@@ -32,6 +32,7 @@ var (
 		Short('p').Default("2345").PlaceHolder("PORT").Int()
 	sslmode = app.Flag("sslmode", "database SSL mode (default: disable)").
 		Short('s').Default("disable").PlaceHolder("SSLMODE").String()
+	verbose  = app.Flag("verbose", "").Short('v').Bool()
 	password = app.Flag("password", "").Short('W').Bool()
 	username = addUsernameFlag(app)
 	database = app.Arg("DBNAME", "").Required().String()
