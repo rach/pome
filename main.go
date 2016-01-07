@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/rach/pome/Godeps/_workspace/src/github.com/alecthomas/kingpin"
 	"log"
 	"os"
 	"os/user"
+
+	"github.com/rach/pome/Godeps/_workspace/src/github.com/alecthomas/kingpin"
 )
 
 //go:generate go-bindata -prefix "static/" -pkg main -o bindata.go static/index.html static/build/...
@@ -28,8 +29,8 @@ var (
 	app  = kingpin.New("pome", "A Postgres Metrics Dashboard.")
 	host = app.Flag("host", "database server host (default: localhost)").
 		Short('h').PlaceHolder("HOSTNAME").Default("localhost").String()
-	web_port = app.Flag("web-port", "web application port (default: 2345)").
-			Short('P').Default("2345").PlaceHolder("PORT").Int()
+	webPort = app.Flag("web-port", "web application port (default: 2345)").
+		Short('P').Default("2345").PlaceHolder("PORT").Int()
 	port = app.Flag("port", "database server port (default: 5432)").
 		Short('p').Default("5432").PlaceHolder("PORT").Int()
 	sslmode = app.Flag("sslmode", "database SSL mode (default: disable)").
@@ -62,6 +63,6 @@ func main() {
 	go metricScheduler(db, &metrics, databaseSizeUpdate, GetDatabeSizeResult, 60*60, 120)
 	go metricScheduler(db, &metrics, numberOfConnectionUpdate, GetNumberOfConnectionResult, 5*60, 120)
 	log.Printf("Starting Pome %s", Version)
-	log.Printf("Application will be available at http://127.0.0.1:%d", *web_port)
-	initWebServer(context, *web_port)
+	log.Printf("Application will be available at http://127.0.0.1:%d", *webPort)
+	initWebServer(context, *webPort)
 }

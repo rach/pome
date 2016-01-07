@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/rach/pome/Godeps/_workspace/src/github.com/elazarl/go-bindata-assetfs"
-	"github.com/rach/pome/Godeps/_workspace/src/github.com/jmoiron/sqlx"
-	_ "github.com/rach/pome/Godeps/_workspace/src/github.com/lib/pq"
 	"io"
 	"log"
 	"net/http"
+
+	"github.com/rach/pome/Godeps/_workspace/src/github.com/elazarl/go-bindata-assetfs"
+	"github.com/rach/pome/Godeps/_workspace/src/github.com/jmoiron/sqlx"
+	_ "github.com/rach/pome/Godeps/_workspace/src/github.com/lib/pq"
 )
 
 func metricsHandler(a *appContext, w http.ResponseWriter, r *http.Request) (int, error) {
@@ -33,7 +34,7 @@ type appHandler struct {
 	H func(*appContext, http.ResponseWriter, *http.Request) (int, error)
 }
 
-func initWebServer(context *appContext, web_port int) {
+func initWebServer(context *appContext, webPort int) {
 	http.Handle("/api/stats", appHandler{context, metricsHandler})
 	http.HandleFunc("/about", aliasHandler)
 	http.HandleFunc("/bloat/indexes", aliasHandler)
@@ -41,7 +42,7 @@ func initWebServer(context *appContext, web_port int) {
 	http.Handle("/",
 		http.FileServer(
 			&assetfs.AssetFS{Asset: Asset, AssetDir: AssetDir, Prefix: ""}))
-	http.ListenAndServe(fmt.Sprintf(":%d", web_port), nil)
+	http.ListenAndServe(fmt.Sprintf(":%d", webPort), nil)
 }
 
 func aliasHandler(rw http.ResponseWriter, req *http.Request) {

@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/rach/pome/Godeps/_workspace/src/github.com/jmoiron/sqlx"
 	"testing"
+
+	"github.com/rach/pome/Godeps/_workspace/src/github.com/jmoiron/sqlx"
 )
 
 var IndexBloatSqlStub = []IndexBloatDatabaseResult{
