@@ -33,7 +33,7 @@ type appHandler struct {
 	H func(*appContext, http.ResponseWriter, *http.Request) (int, error)
 }
 
-func initWebServer(context *appContext) {
+func initWebServer(context *appContext, web_port int) {
 	http.Handle("/api/stats", appHandler{context, metricsHandler})
 	http.HandleFunc("/about", aliasHandler)
 	http.HandleFunc("/bloat/indexes", aliasHandler)
@@ -41,7 +41,7 @@ func initWebServer(context *appContext) {
 	http.Handle("/",
 		http.FileServer(
 			&assetfs.AssetFS{Asset: Asset, AssetDir: AssetDir, Prefix: ""}))
-	http.ListenAndServe(fmt.Sprintf(":%d", *port), nil)
+	http.ListenAndServe(fmt.Sprintf(":%d", web_port), nil)
 }
 
 func aliasHandler(rw http.ResponseWriter, req *http.Request) {

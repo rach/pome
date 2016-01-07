@@ -28,8 +28,10 @@ var (
 	app  = kingpin.New("pome", "A Postgres Metrics Dashboard.")
 	host = app.Flag("host", "database server host (default: localhost)").
 		Short('h').PlaceHolder("HOSTNAME").Default("localhost").String()
-	port = app.Flag("port", "database server port (default: 2345)").
-		Short('p').Default("2345").PlaceHolder("PORT").Int()
+	web_port = app.Flag("web-port", "web application port (default: 2345)").
+			Short('P').Default("2345").PlaceHolder("PORT").Int()
+	port = app.Flag("port", "database server port (default: 5432)").
+		Short('p').Default("5432").PlaceHolder("PORT").Int()
 	sslmode = app.Flag("sslmode", "database SSL mode (default: disable)").
 		Short('s').Default("disable").PlaceHolder("SSLMODE").String()
 	verbose  = app.Flag("verbose", "").Short('v').Bool()
@@ -52,7 +54,7 @@ func main() {
 		fmt.Print("Enter Password: ")
 		fmt.Scanln(&pwd)
 	}
-	var connstring = connectionString(*host, *database, *username, pwd, *sslmode)
+	var connstring = connectionString(*host, *database, *username, pwd, *sslmode, *port)
 	db := connectDB(connstring)
 	context := &appContext{db, &metrics}
 	go metricScheduler(db, &metrics, indexBloatUpdate, GetIndexBloatResult, 12*60*60, 120)
@@ -60,6 +62,6 @@ func main() {
 	go metricScheduler(db, &metrics, databaseSizeUpdate, GetDatabeSizeResult, 60*60, 120)
 	go metricScheduler(db, &metrics, numberOfConnectionUpdate, GetNumberOfConnectionResult, 5*60, 120)
 	log.Printf("Starting Pome %s", Version)
-	log.Printf("Application will be available at http://127.0.0.1:%d", *port)
-	initWebServer(context)
+	log.Printf("Application will be available at http://127.0.0.1:%d", *web_port)
+	initWebServer(context, *web_port)
 }
