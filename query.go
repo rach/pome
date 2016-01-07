@@ -194,7 +194,7 @@ SELECT schemaname || '.' || tblname AS key, schemaname as schema, tblname as tab
  --   ELSE 0
  -- END AS extra_ratio, fillfactor,
   CASE WHEN (tblpages-est_tblpages_ff)*bs > 0
-    THEN (tblpages-est_tblpages_ff)*bs
+    THEN ((tblpages-est_tblpages_ff)*bs)::bigint
     ELSE 0
   END AS bloat_bytes,
   CASE WHEN tblpages - est_tblpages_ff > 0
