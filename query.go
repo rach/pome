@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+	"log"
+
 	"github.com/rach/pome/Godeps/_workspace/src/github.com/jmoiron/sqlx"
 	_ "github.com/rach/pome/Godeps/_workspace/src/github.com/lib/pq"
-	"log"
 )
 
 func connectDB(dbURL string) *sqlx.DB {

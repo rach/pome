@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/rach/pome/Godeps/_workspace/src/github.com/jmoiron/sqlx"
-	_ "github.com/rach/pome/Godeps/_workspace/src/github.com/lib/pq"
 	"math"
 	"time"
+
+	"github.com/rach/pome/Godeps/_workspace/src/github.com/jmoiron/sqlx"
+	_ "github.com/rach/pome/Godeps/_workspace/src/github.com/lib/pq"
 )
 
 type MetricList struct {
@@ -54,6 +55,7 @@ type bloatMetric struct {
 	BloatBytes int64   `json:"bloat_bytes"`
 	BloatRatio float64 `json:"bloat_ratio"`
 }
+
 type tableBloatMetric struct {
 	TableSchema string   `json:"table_schema"`
 	TableName   string   `json:"table_name"`
@@ -91,16 +93,16 @@ func initMapMetric(key string, vm *map[string]Metric, metric Metric) {
 func indexBloatUpdate(db *sqlx.DB, metrics *MetricList, datafct databaseResultFct, limit int) {
 	timestamp := GetTimestamp()
 	results := (datafct(db)).([]IndexBloatDatabaseResult)
-	var total_bytes int64 = 0
-	var top_bloat float64 = 0
+	var totalBytes int64 = 0
+	var topBloat float64 = 0
 
 	// iterate over each row
 	for _, v := range results {
 		if v.Schema == "information_schema" {
 			continue
 		}
-		total_bytes += v.BloatBytes
-		top_bloat = math.Max(top_bloat, v.BloatRatio)
+		totalBytes += v.BloatBytes
+		topBloat = math.Max(topBloat, v.BloatRatio)
 		initMapMetric(
 			v.Key,
 			&((*metrics).IndexBloat),
@@ -117,10 +119,10 @@ func indexBloatUpdate(db *sqlx.DB, metrics *MetricList, datafct databaseResultFc
 		(*metrics).IndexBloat[v.Key] = current_val
 	}
 
-	tbrm := topBloatRatioMetric{timestamp, top_bloat}
+	tbrm := topBloatRatioMetric{timestamp, topBloat}
 	(*metrics).TopBloatIndexRatio = appendAndFilter((*metrics).TopBloatIndexRatio, tbrm, limit)
 
-	tbbm := totalBloatBytesMetric{timestamp, total_bytes}
+	tbbm := totalBloatBytesMetric{timestamp, totalBytes}
 	(*metrics).TotalIndexBloatBytes = appendAndFilter((*metrics).TotalIndexBloatBytes, tbbm, limit)
 }
 
