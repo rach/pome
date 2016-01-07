@@ -15,23 +15,30 @@ const (
 )
 
 func addUsernameFlag(app *kingpin.Application) *string {
-	u, err := user.Current()
-	if err != nil {
-		return app.Flag("username", "").Short('U').
-			PlaceHolder("USERNAME").Required().String()
+	uname := os.Getenv("PGUSER")
+	if uname == "" {
+		u, err := user.Current()
+		if err != nil {
+			return app.Flag("username", "").Short('U').
+				PlaceHolder("USERNAME").Required().String()
+		}
+		uname = u.Username
 	}
-	return app.Flag("username", "").Short('U').Default(u.Username).
-		PlaceHolder(fmt.Sprintf("USERNAME (default: %s)", u.Username)).String()
+	return app.Flag("username", "").Short('U').Default(uname).
+		PlaceHolder(fmt.Sprintf("USERNAME (default: %s)", uname)).String()
 }
 
 var (
 	app  = kingpin.New("pome", "A Postgres Metrics Dashboard.")
-	host = app.Flag("host", "database server host (default: localhost)").
-		Short('h').PlaceHolder("HOSTNAME").Default("localhost").String()
+	host = app.Flag("host", "database server host").
+		OverrideDefaultFromEnvar("PGHOST").
+		Short('h').PlaceHolder("HOSTNAME").String()
 	web_port = app.Flag("web-port", "web application port (default: 2345)").
-			Short('P').Default("2345").PlaceHolder("PORT").Int()
+			Short('P').Default("2345").PlaceHolder("WEBPORT").Int()
 	port = app.Flag("port", "database server port (default: 5432)").
-		Short('p').Default("5432").PlaceHolder("PORT").Int()
+		Short('p').Default("5432").
+		OverrideDefaultFromEnvar("PGPORT").
+		PlaceHolder("PORT").Int()
 	sslmode = app.Flag("sslmode", "database SSL mode (default: disable)").
 		Short('s').Default("disable").PlaceHolder("SSLMODE").String()
 	verbose  = app.Flag("verbose", "").Short('v').Bool()
@@ -49,7 +56,7 @@ func parseCmdLine(args []string) (command string, err error) {
 func main() {
 	kingpin.MustParse(parseCmdLine(os.Args[1:]))
 	var metrics = MetricList{Version: Version}
-	pwd := ""
+	pwd := os.Getenv("PGPASSWORD")
 	if *password {
 		fmt.Print("Enter Password: ")
 		fmt.Scanln(&pwd)
