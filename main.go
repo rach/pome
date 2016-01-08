@@ -35,7 +35,7 @@ var (
 		OverrideDefaultFromEnvar("PGHOST").
 		Short('h').PlaceHolder("HOSTNAME").String()
 	webPort = app.Flag("web-port", "web application port (default: 2345)").
-			Short('P').Default("2345").PlaceHolder("WEBPORT").Int()
+		Short('P').Default("2345").PlaceHolder("WEBPORT").Int()
 	port = app.Flag("port", "database server port (default: 5432)").
 		Short('p').Default("5432").
 		OverrideDefaultFromEnvar("PGPORT").
