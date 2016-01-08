@@ -89,7 +89,7 @@ It can give the illusion that everything is alright when your database is slowly
 
 This project follows 3 principles: Simplicity, Opinionated, Batteries included. 
 
-Simplicity, the project is aimed to be easy to deploy and run. It's why Pome can run as a binary. The project also aimed to fell like the `psql` command and use common arguments. 
+Simplicity, the project is aimed to be easy to deploy and run. It's why Pome can run as a binary. The project also aimed to feel like the `psql` command and use common arguments. 
 
 Opinionated, Pome has the goal to be pre-configured and analyse commonly useful metrics. We want the project to have sensible defaults. In the future, the tool will allow some level of configuration but without compromising Simplicity. 
 
