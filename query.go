@@ -3,13 +3,32 @@ package main
 import (
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/rach/pome/Godeps/_workspace/src/github.com/jmoiron/sqlx"
 	_ "github.com/rach/pome/Godeps/_workspace/src/github.com/lib/pq"
 )
 
-func connectDB(dbURL string) *sqlx.DB {
+func connectDB(host string, dbname string, username string, password string, sslmode string, port int) *sqlx.DB {
+	// TODO This could be rewritten in a nicer way
+	dbURL := connectionString(host, dbname, username, password, sslmode, port)
 	db := sqlx.MustOpen("postgres", dbURL)
+	// we do a manual ping because MustConnect raise a panic
+	err := db.Ping()
+	if err != nil {
+		if len(password) > 0 || !strings.Contains(err.Error(), "password authentication failed") {
+			log.Fatal(err)
+		}
+		pwd := ""
+		fmt.Print("Enter Password: ")
+		fmt.Scanln(&pwd)
+		dbURL = connectionString(host, dbname, username, pwd, sslmode, port)
+		db = sqlx.MustOpen("postgres", dbURL)
+		err := db.Ping()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 	return db
 }
 

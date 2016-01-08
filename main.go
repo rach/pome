@@ -62,8 +62,7 @@ func main() {
 		fmt.Print("Enter Password: ")
 		fmt.Scanln(&pwd)
 	}
-	var connstring = connectionString(*host, *database, *username, pwd, *sslmode, *port)
-	db := connectDB(connstring)
+	db := connectDB(*host, *database, *username, pwd, *sslmode, *port)
 	context := &appContext{db, &metrics}
 	go metricScheduler(db, &metrics, indexBloatUpdate, GetIndexBloatResult, 12*60*60, 120)
 	go metricScheduler(db, &metrics, tableBloatUpdate, GetTableBloatResult, 12*60*60, 120)
