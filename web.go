@@ -13,6 +13,16 @@ import (
 	_ "github.com/rach/pome/Godeps/_workspace/src/github.com/lib/pq"
 )
 
+type appContext struct {
+	db      *sqlx.DB
+	metrics *MetricList
+}
+
+type appHandler struct {
+	*appContext
+	H func(*appContext, http.ResponseWriter, *http.Request) (int, error)
+}
+
 func metricsHandler(a *appContext, w http.ResponseWriter, r *http.Request) (int, error) {
 	js, err := json.Marshal(a.metrics)
 	if err != nil {
@@ -24,27 +34,6 @@ func metricsHandler(a *appContext, w http.ResponseWriter, r *http.Request) (int,
 	return 200, nil
 }
 
-type appContext struct {
-	db      *sqlx.DB
-	metrics *MetricList
-}
-
-type appHandler struct {
-	*appContext
-	H func(*appContext, http.ResponseWriter, *http.Request) (int, error)
-}
-
-func initWebServer(context *appContext, webPort int) {
-	http.Handle("/api/stats", appHandler{context, metricsHandler})
-	http.HandleFunc("/about", aliasHandler)
-	http.HandleFunc("/bloat/indexes", aliasHandler)
-	http.HandleFunc("/bloat/tables", aliasHandler)
-	http.Handle("/",
-		http.FileServer(
-			&assetfs.AssetFS{Asset: Asset, AssetDir: AssetDir, Prefix: ""}))
-	http.ListenAndServe(fmt.Sprintf(":%d", webPort), nil)
-}
-
 func aliasHandler(rw http.ResponseWriter, req *http.Request) {
 	if bs, err := Asset("index.html"); err != nil {
 		rw.WriteHeader(http.StatusNotFound)
@@ -52,6 +41,20 @@ func aliasHandler(rw http.ResponseWriter, req *http.Request) {
 		var reader = bytes.NewBuffer(bs)
 		io.Copy(rw, reader)
 	}
+}
+
+func newStaticHandler() http.Handler {
+	fs := assetfs.AssetFS{Asset: Asset, AssetDir: AssetDir, Prefix: ""}
+	return http.FileServer(&fs)
+}
+
+func initWebServer(context *appContext, webPort int) {
+	http.Handle("/api/stats", appHandler{context, metricsHandler})
+	http.HandleFunc("/about", aliasHandler)
+	http.HandleFunc("/bloat/indexes", aliasHandler)
+	http.HandleFunc("/bloat/tables", aliasHandler)
+	http.Handle("/", newStaticHandler())
+	http.ListenAndServe(fmt.Sprintf(":%d", webPort), nil)
 }
 
 func (ah appHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
