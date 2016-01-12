@@ -3,3 +3,4 @@ node_modules
 static/build/
 /pome
 /pome.test
+/build

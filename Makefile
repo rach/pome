@@ -32,3 +32,6 @@ build: frontend-build backend-build
 
 test: frontend-test backend-test
 
+release:
+	gox -output="build/{{.Dir}}_{{.OS}}_{{.Arch}}"
+
