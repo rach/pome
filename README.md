@@ -7,12 +7,11 @@ You can read more about the motivation behind Pome [here](http://rachbelaid.com/
 
 ##How to install Pome
 
-Pome does not yet provide pre-built binaries, so you need to use the Go packaging system for now.
-To install Pome, you must have Go installed so you can use the `go get` command:
+Pome provides pre-built binaries with the [releases](https://github.com/rach/pome/releases), but you can also use the Go packaging system:
 
     go get github.com/rach/pome
    
-You can also use `go get` to update Pome:
+Then to update Pome:
 
     go get -u github.com/rach/pome
 
