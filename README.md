@@ -1,11 +1,14 @@
 #Pome
 
-[![Join the chat at https://gitter.im/rach/pome](https://badges.gitter.im/rach/pome.svg)](https://gitter.im/rach/pome?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Pome stands for **Po**stgres **Me**trics.
 Pome is a PostgreSQL Metrics Dashboard to keep track of the health of your database.
 This project is at a very early stage and there are a lot of missing features,
 but I'm hoping to be able to make the project progress quickly.
 You can read more about the motivation behind Pome [here](http://rachbelaid.com/introducing-pome)
+
+
+[![Join the chat at https://gitter.im/rach/pome](https://badges.gitter.im/rach/pome.svg)](https://gitter.im/rach/pome?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 
 ##How to install Pome
 
