@@ -1,4 +1,6 @@
 #Pome
+
+[![Join the chat at https://gitter.im/rach/pome](https://badges.gitter.im/rach/pome.svg)](https://gitter.im/rach/pome?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Pome stands for **Po**stgres **Me**trics.
 Pome is a PostgreSQL Metrics Dashboard to keep track of the health of your database.
 This project is at a very early stage and there are a lot of missing features,
