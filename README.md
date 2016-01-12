@@ -95,7 +95,7 @@ Opinionated, Pome has the goal to be pre-configured and analyse commonly useful 
 
 Batteries Included, Pome is built to be accessed via a web interface. The web app is shipped within the binary and Pome is taking care of serving the assets (HTML, js, CSS). Pome is not built to be a public facing tool so performance into delivering assets was not a concern. It should be possible to run the frontend individually if it's concern for you. Pome tries to not depend on any dependency which cannot be shipped with the binary and it's one of the reasons why Pome is stateless right now.
 
-### Why Pome is not and won't be
+### What Pome is not and won't be
 
 Pome isn't aiming to be a tool for humongous Postgres instances which are already in the hands of a DBA who can have the time to setup more advanced monitoring tools. Pome won't be an alternative to a more configurable tool like collectd.
 
