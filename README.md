@@ -129,7 +129,7 @@ This project had also some learning motivation, as I had never written a Go proj
 Otherwise, there are a few tasks which can be done if you want to help
 
 - Suggesting new metrics
-- Testing the tools and submiting issues
+- Testing the tools and submitting issues
 - Reviewing and Improving the current code codebase.
 Both languages used are not my daily programming language so I probably did beginner mistakes
 - Correcting my English. Sorry, I'm not a native English speaker so mistakes will happen
