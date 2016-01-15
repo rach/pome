@@ -714,7 +714,7 @@ func buildAppCss() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "build/app.css", size: 122134, mode: os.FileMode(420), modTime: time.Unix(1452846412, 0)}
+	info := bindataFileInfo{name: "build/app.css", size: 122134, mode: os.FileMode(420), modTime: time.Unix(1452848001, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -734,7 +734,7 @@ func buildAppJs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "build/app.js", size: 1734197, mode: os.FileMode(420), modTime: time.Unix(1452846412, 0)}
+	info := bindataFileInfo{name: "build/app.js", size: 1734197, mode: os.FileMode(420), modTime: time.Unix(1452848001, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }

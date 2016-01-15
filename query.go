@@ -32,11 +32,20 @@ func connectDB(host string, dbname string, username string, password string, ssl
 	return db
 }
 
+func pgEscapeArg(arg string) string {
+	// escaping following this rules
+	// http://www.postgresql.org/docs/9.4/static/libpq-connect.html#AEN41151
+
+	replaced := strings.Replace(arg, "\\", "\\\\", -1)
+	replaced = strings.Replace(replaced, "'", "\\'", -1)
+	return replaced
+}
+
 func connectionString(host string, dbname string, username string, password string, sslmode string, port int) string {
 	// TODO: escape single quote
 	return fmt.Sprintf(
 		"host='%s' dbname='%s' user='%s' password='%s' sslmode='%s' port='%d'",
-		host, dbname, username, password, sslmode, port)
+		host, pgEscapeArg(dbname), pgEscapeArg(username), pgEscapeArg(password), sslmode, port)
 }
 
 type IndexBloatDatabaseResult struct {
