@@ -9,7 +9,7 @@ import (
 	"github.com/rach/pome/Godeps/_workspace/src/github.com/alecthomas/kingpin"
 )
 
-//go:generate go-bindata -prefix "static/" -pkg main -o bindata.go static/index.html static/build/...
+//go:generate go-bindata -prefix "static/" -pkg main -o bindata.go static/index.html static/favicons/... static/build/...
 
 const (
 	Version = "0.1.3"
