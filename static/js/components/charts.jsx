@@ -71,7 +71,7 @@ class Chart extends React.Component {
                   .on("mouseover", (d, i) => {
                     //this should use action dispatch to update the state
                     var t = datetimeFormat(new Date(xdata[i] * 1000));
-                    JQuery(React.findDOMNode(that)).find('.bar-value').text(t + " => " + yFormatter(d));
+                    JQuery(React.findDOMNode(that)).find('.bar-value').text(t + "  → " + yFormatter(d));
                   })
                   .on("mouseout", (d, i) => {
                     //this should use action dispatch to update the state
