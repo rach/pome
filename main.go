@@ -12,7 +12,7 @@ import (
 //go:generate go-bindata -prefix "static/" -pkg main -o bindata.go static/index.html static/favicons/... static/build/...
 
 const (
-	Version = "0.1.3"
+	Version = "0.1.4"
 )
 
 func addUsernameFlag(app *kingpin.Application) *string {
