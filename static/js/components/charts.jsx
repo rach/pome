@@ -6,6 +6,7 @@ import JQuery from 'jquery';
 class Chart extends React.Component {
   static propTypes = {
     data: React.PropTypes.array,
+    meta: React.PropTypes.array,
     x: React.PropTypes.array,
     title: React.PropTypes.string,
     yMax: React.PropTypes.number
@@ -70,8 +71,15 @@ class Chart extends React.Component {
                   .attr("height", function(d) { return y(0) - y(d); })
                   .on("mouseover", (d, i) => {
                     //this should use action dispatch to update the state
+                    var suffix = "";
+                    if (that.props.meta){
+                      suffix = "<br/> " + that.props.meta[i];
+                    }
+
                     var t = datetimeFormat(new Date(xdata[i] * 1000));
-                    JQuery(React.findDOMNode(that)).find('.bar-value').text(t + "  → " + yFormatter(d));
+                    JQuery(React.findDOMNode(that))
+                                .find('.bar-value')
+                                .html(t + " → " + yFormatter(d) + suffix);
                   })
                   .on("mouseout", (d, i) => {
                     //this should use action dispatch to update the state
@@ -92,19 +100,19 @@ class Chart extends React.Component {
        .attr("class", "y axis")
        .attr("transform", "translate("+ margin.left + ", 0)")
        .call(yAxis);
-    
+
     var subtitle = "";
     if (this.props.subtitle){
       subtitle = (<h6>{this.props.subtitle}</h6>);
 
     }
     return (
-      <div>
+      <div className="chart">
+        <div className="bar-value text-right">
+        </div>
         <div className="row">
           <div className="col-sm-8">
             <h5>{this.props.title}</h5>
-          </div>
-          <div className="col-sm-4 bar-value text-right">
           </div>
         </div>
         <div className="row">

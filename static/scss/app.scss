@@ -24,8 +24,16 @@ footer {
   min-height: 800px;
 }
 
+.chart{
+  position: relative;
+}
+
 .bar-value{
   font-size: 0.8em;
+  position: absolute;
+  width: 500px;
+  top: 5px;
+  right: 10px;
 }
 
 hr {

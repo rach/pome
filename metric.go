@@ -1,7 +1,6 @@
 package main
 
 import (
-	"math"
 	"time"
 
 	"github.com/rach/pome/Godeps/_workspace/src/github.com/jmoiron/sqlx"
@@ -40,9 +39,19 @@ type databaseSizeMetric struct {
 	IndexRatio float64 `json:"index_ratio"`
 }
 
-type topBloatRatioMetric struct {
-	Timestamp  int64   `json:"timestamp"`
-	BloatRatio float64 `json:"bloat_ratio"`
+type topTableBloatRatioMetric struct {
+	Timestamp   int64   `json:"timestamp"`
+	BloatRatio  float64 `json:"bloat_ratio"`
+	TableSchema string  `json:"table_schema"`
+	TableName   string  `json:"table_name"`
+}
+
+type topIndexBloatRatioMetric struct {
+	Timestamp   int64   `json:"timestamp"`
+	BloatRatio  float64 `json:"bloat_ratio"`
+	TableSchema string  `json:"table_schema"`
+	TableName   string  `json:"table_name"`
+	IndexName   string  `json:"index_name"`
 }
 
 type totalBloatBytesMetric struct {
@@ -94,7 +103,8 @@ func indexBloatUpdate(db *sqlx.DB, metrics *MetricList, datafct databaseResultFc
 	timestamp := GetTimestamp()
 	results := (datafct(db)).([]IndexBloatDatabaseResult)
 	var totalBytes int64 = 0
-	var topBloat float64 = 0
+	var topBloatRatio float64 = 0
+	var topBloatRatioMetric topIndexBloatRatioMetric
 
 	// iterate over each row
 	for _, v := range results {
@@ -102,7 +112,16 @@ func indexBloatUpdate(db *sqlx.DB, metrics *MetricList, datafct databaseResultFc
 			continue
 		}
 		totalBytes += v.BloatBytes
-		topBloat = math.Max(topBloat, v.BloatRatio)
+		if v.BloatRatio > topBloatRatio {
+			topBloatRatio = v.BloatRatio
+			topBloatRatioMetric = topIndexBloatRatioMetric{
+				timestamp,
+				topBloatRatio,
+				v.Schema,
+				v.Table,
+				v.Index,
+			}
+		}
 		initMapMetric(
 			v.Key,
 			&((*metrics).IndexBloat),
@@ -119,8 +138,11 @@ func indexBloatUpdate(db *sqlx.DB, metrics *MetricList, datafct databaseResultFc
 		(*metrics).IndexBloat[v.Key] = current_val
 	}
 
-	tbrm := topBloatRatioMetric{timestamp, topBloat}
-	(*metrics).TopBloatIndexRatio = appendAndFilter((*metrics).TopBloatIndexRatio, tbrm, limit)
+	(*metrics).TopBloatIndexRatio = appendAndFilter(
+		(*metrics).TopBloatIndexRatio,
+		topBloatRatioMetric,
+		limit,
+	)
 
 	tbbm := totalBloatBytesMetric{timestamp, totalBytes}
 	(*metrics).TotalIndexBloatBytes = appendAndFilter((*metrics).TotalIndexBloatBytes, tbbm, limit)
@@ -130,7 +152,8 @@ func tableBloatUpdate(db *sqlx.DB, metrics *MetricList, datafct databaseResultFc
 	timestamp := GetTimestamp()
 	results := (datafct(db)).([]TableBloatDatabaseResult)
 	var total_bytes int64 = 0
-	var top_bloat float64 = 0
+	var topBloatRatio float64 = 0
+	var topBloatRatioMetric topTableBloatRatioMetric
 
 	// iterate over each row
 	for _, v := range results {
@@ -138,7 +161,15 @@ func tableBloatUpdate(db *sqlx.DB, metrics *MetricList, datafct databaseResultFc
 			continue
 		}
 		total_bytes += v.BloatBytes
-		top_bloat = math.Max(top_bloat, v.BloatRatio)
+		if v.BloatRatio > topBloatRatio {
+			topBloatRatio = v.BloatRatio
+			topBloatRatioMetric = topTableBloatRatioMetric{
+				timestamp,
+				topBloatRatio,
+				v.Schema,
+				v.Table,
+			}
+		}
 
 		initMapMetric(
 			v.Key,
@@ -155,8 +186,11 @@ func tableBloatUpdate(db *sqlx.DB, metrics *MetricList, datafct databaseResultFc
 		(*metrics).TableBloat[v.Key] = current_val
 	}
 
-	tbrm := topBloatRatioMetric{timestamp, top_bloat}
-	(*metrics).TopBloatTableRatio = appendAndFilter((*metrics).TopBloatTableRatio, tbrm, limit)
+	(*metrics).TopBloatTableRatio = appendAndFilter(
+		(*metrics).TopBloatTableRatio,
+		topBloatRatioMetric,
+		limit,
+	)
 
 	tbbm := totalBloatBytesMetric{timestamp, total_bytes}
 	(*metrics).TotalTableBloatBytes = appendAndFilter((*metrics).TotalTableBloatBytes, tbbm, limit)

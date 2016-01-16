@@ -22,10 +22,16 @@ class Home extends Component {
         const {state} = this.props;
         const indexBloat = state.app.metrics.top_index_bloat.map((v)=> v.bloat_ratio);
         const xIndexBloat = state.app.metrics.top_index_bloat.map((v)=> v.timestamp);
+        const xIndexMeta=  state.app.metrics.top_index_bloat.map(
+          (v)=> "Schema: " + v.table_schema + ", Table: " + v.table_name + ", Index: " + v.index_name
+        );
         const indexWaste = state.app.metrics.total_index_bloat_bytes.map((v)=> v.bloat_bytes);
         const xIndexWaste = state.app.metrics.total_index_bloat_bytes.map((v)=> v.timestamp);
         const tableBloat = state.app.metrics.top_table_bloat.map((v)=> v.bloat_ratio);
         const xTableBloat = state.app.metrics.top_table_bloat.map((v)=> v.timestamp);
+        const xTableMeta=  state.app.metrics.top_index_bloat.map(
+          (v)=> "Schema: " + v.table_schema + ", Table: " + v.table_name 
+        );
         const tableWaste = state.app.metrics.total_table_bloat_bytes.map((v)=> v.bloat_bytes);
         const xTableWaste = state.app.metrics.total_table_bloat_bytes.map((v)=> v.timestamp);
         const databaseSize = state.app.metrics.database_size.map((v)=> v.total_size);
@@ -39,11 +45,11 @@ class Home extends Component {
             <div>
                 <Chart data={numOfConnection} x={xNumOfConnection} yFormatter={(x)=>{return x}} title={"Number of connections"}/>
                 <hr/>
-                <Chart data={indexBloat} x={xIndexBloat} yMax={100} yFormatter={formatPercent} title={"Most bloated index"}/>
+                <Chart data={indexBloat} x={xIndexBloat} meta={xIndexMeta} yMax={100} yFormatter={formatPercent} title={"Most bloated index"}/>
                 <hr/>
                 <Chart data={indexWaste} x={xIndexWaste} yFormatter={filesize} title={"Total wasted bytes for indexes"} />
                 <hr/>
-                <Chart data={tableBloat} x={xTableBloat} yMax={100} yFormatter={formatPercent} title={"Most bloated table"}/>
+                <Chart data={tableBloat} x={xTableBloat} meta={xTableMeta} yMax={100} yFormatter={formatPercent} title={"Most bloated table"}/>
                 <hr/>
                 <Chart data={tableWaste} x={xTableWaste} yFormatter={filesize} title={"Total wasted bytes for tables"}/>
                 <hr/>
