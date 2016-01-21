@@ -19,6 +19,20 @@ type MetricList struct {
 	Version              string            `json:"version"`
 }
 
+func initMetricList(version string) MetricList {
+	return MetricList{
+		Version:              version,
+		TableBloat:           make(map[string]Metric),
+		IndexBloat:           make(map[string]Metric),
+		TopBloatIndexRatio:   []Metric{},
+		TopBloatTableRatio:   []Metric{},
+		TotalTableBloatBytes: []Metric{},
+		TotalIndexBloatBytes: []Metric{},
+		DatabaseSize:         []Metric{},
+		NumberOfConnection:   []Metric{},
+	}
+}
+
 type metricFct func(db *sqlx.DB, metrics *MetricList, datafct databaseResultFct, limit int)
 
 type Metric interface {
@@ -208,11 +222,4 @@ func numberOfConnectionUpdate(db *sqlx.DB, metrics *MetricList, datafct database
 	res := (datafct(db)).(NumberOfConnectionResult)
 	met := numberConnectionMetric{timestamp, res.Count}
 	(*metrics).NumberOfConnection = appendAndFilter((*metrics).NumberOfConnection, met, limit)
-}
-
-func metricScheduler(db *sqlx.DB, metrics *MetricList, mfct metricFct, datafct databaseResultFct, delay int, limit int) {
-	for {
-		mfct(db, metrics, datafct, limit)
-		time.Sleep(time.Duration(delay) * time.Second)
-	}
 }

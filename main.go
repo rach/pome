@@ -7,6 +7,7 @@ import (
 	"os/user"
 
 	"github.com/rach/pome/Godeps/_workspace/src/github.com/alecthomas/kingpin"
+	"github.com/robfig/cron"
 )
 
 //go:generate go-bindata -prefix "static/" -pkg main -o bindata.go static/index.html static/favicons/... static/build/...
@@ -14,6 +15,27 @@ import (
 const (
 	Version = "0.1.4"
 )
+
+type CronValue string
+
+func (c *CronValue) Set(value string) error {
+	_, err := cron.Parse(value)
+	if err != nil {
+		return fmt.Errorf("expected cron expression or '@every DURATION' got '%s'", value)
+	}
+	*c = (CronValue)(value)
+	return nil
+}
+
+func (c *CronValue) String() string {
+	return (string)(*c)
+}
+
+func CronFlag(s kingpin.Settings) (target *string) {
+	target = new(string)
+	s.SetValue((*CronValue)(target))
+	return
+}
 
 func addUsernameFlag(app *kingpin.Application) *string {
 	uname := os.Getenv("PGUSER")
@@ -46,6 +68,27 @@ var (
 	password = app.Flag("password", "").Short('W').Bool()
 	username = addUsernameFlag(app)
 	database = app.Arg("DBNAME", "").Required().String()
+	// Scheduling flags
+	scheduleTableBloat = CronFlag(
+		app.
+			Flag("schedule-table-bloat", "Cron like expression for when to query table bloat").
+			Default("@every 12h"),
+	)
+	scheduleIndexBloat = CronFlag(
+		app.
+			Flag("schedule-index-bloat", "Cron like expression for when to the query index bloat").
+			Default("@every 12h"),
+	)
+	scheduleDbSize = CronFlag(
+		app.
+			Flag("schedule-db-size", "Cron like expression for when to query the database size").
+			Default("@every 1h"),
+	)
+	scheduleNumConn = CronFlag(
+		app.
+			Flag("schedule-num-conn", "Cron like expression for when to query the number of connection").
+			Default("@every 5m"),
+	)
 )
 
 func parseCmdLine(args []string) (command string, err error) {
@@ -56,7 +99,7 @@ func parseCmdLine(args []string) (command string, err error) {
 
 func main() {
 	kingpin.MustParse(parseCmdLine(os.Args[1:]))
-	var metrics = MetricList{Version: Version}
+	var metrics = initMetricList(Version)
 	pwd := os.Getenv("PGPASSWORD")
 	if *password {
 		fmt.Print("Enter Password: ")
@@ -64,10 +107,31 @@ func main() {
 	}
 	db := connectDB(*host, *database, *username, pwd, *sslmode, *port)
 	context := &appContext{db, &metrics}
-	go metricScheduler(db, &metrics, indexBloatUpdate, GetIndexBloatResult, 12*60*60, 120)
-	go metricScheduler(db, &metrics, tableBloatUpdate, GetTableBloatResult, 12*60*60, 120)
-	go metricScheduler(db, &metrics, databaseSizeUpdate, GetDatabeSizeResult, 60*60, 120)
-	go metricScheduler(db, &metrics, numberOfConnectionUpdate, GetNumberOfConnectionResult, 5*60, 120)
+	// Scheduling tasks
+
+	c := cron.New()
+	c.AddFunc(*scheduleIndexBloat,
+		func() {
+			indexBloatUpdate(db, &metrics, GetIndexBloatResult, 120)
+		},
+	)
+	c.AddFunc(*scheduleTableBloat,
+		func() {
+			tableBloatUpdate(db, &metrics, GetTableBloatResult, 120)
+		},
+	)
+	c.AddFunc(*scheduleDbSize,
+		func() {
+			databaseSizeUpdate(db, &metrics, GetDatabeSizeResult, 120)
+		},
+	)
+	c.AddFunc(*scheduleNumConn,
+		func() {
+			numberOfConnectionUpdate(db, &metrics, GetNumberOfConnectionResult, 120)
+		},
+	)
+	c.Start()
+
 	log.Printf("Starting Pome %s", Version)
 	log.Printf("Application will be available at http://127.0.0.1:%d", *webPort)
 	initWebServer(context, *webPort)
