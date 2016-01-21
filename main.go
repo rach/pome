@@ -56,6 +56,8 @@ var (
 	host = app.Flag("host", "database server host (default: localhost)").
 		OverrideDefaultFromEnvar("PGHOST").
 		Short('h').PlaceHolder("HOSTNAME").String()
+	webHost = app.Flag("web-host", "web application host (default: 127.0.0.1)").
+		Short('H').Default("127.0.0.1").PlaceHolder("WEBHOST").String()
 	webPort = app.Flag("web-port", "web application port (default: 2345)").
 		Short('P').Default("2345").PlaceHolder("WEBPORT").Int()
 	port = app.Flag("port", "database server port (default: 5432)").
@@ -113,7 +115,7 @@ func main() {
 	db := connectDB(*host, *database, *username, pwd, *sslmode, *port)
 	context := &appContext{db, &metrics}
 	log.Printf("Starting Pome %s", Version)
-	log.Printf("Application will be available at http://127.0.0.1:%d", *webPort)
+	log.Printf("Application will be available at http://%s:%d", *webHost, *webPort)
 
 	initScheduler(
 		db,
@@ -124,5 +126,5 @@ func main() {
 		*scheduleNumConn,
 		*scheduleTPS,
 	)
-	initWebServer(context, *webPort)
+	initWebServer(context, *webHost, *webPort)
 }
