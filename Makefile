@@ -13,7 +13,7 @@ frontend-test:
 	@echo "no test available yet for the Frontend"
 
 backend-build:
-	@echo "** Building Bakcend **"
+	@echo "** Building Backend **"
 	go generate
 	go build
 
