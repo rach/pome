@@ -2,12 +2,58 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"strings"
-
 	"github.com/rach/pome/Godeps/_workspace/src/github.com/jmoiron/sqlx"
 	_ "github.com/rach/pome/Godeps/_workspace/src/github.com/lib/pq"
+	"log"
+	nurl "net/url"
+	"strconv"
+	"strings"
 )
+
+func parseURL(url string) map[string]string {
+	var kvs = make(map[string]string)
+	u, err := nurl.Parse(url)
+	if err != nil {
+		return kvs
+	}
+
+	if u.Scheme != "postgres" && u.Scheme != "postgresql" {
+		return kvs
+	}
+
+	accrue := func(k, v string) {
+		if v != "" {
+			kvs[k] = pgEscapeArg(v)
+		}
+	}
+
+	if u.User != nil {
+		v := u.User.Username()
+		accrue("user", v)
+
+		v, _ = u.User.Password()
+		accrue("password", v)
+	}
+
+	i := strings.Index(u.Host, ":")
+	if i < 0 {
+		accrue("host", u.Host)
+	} else {
+		accrue("host", u.Host[:i])
+		accrue("port", u.Host[i+1:])
+	}
+
+	if u.Path != "" {
+		accrue("dbname", u.Path[1:])
+	}
+
+	q := u.Query()
+	for k := range q {
+		accrue(k, q.Get(k))
+	}
+
+	return kvs
+}
 
 func connectDB(host string, dbname string, username string, password string, sslmode string, port int) *sqlx.DB {
 	// TODO This could be rewritten in a nicer way
@@ -36,16 +82,29 @@ func pgEscapeArg(arg string) string {
 	// escaping following this rules
 	// http://www.postgresql.org/docs/9.4/static/libpq-connect.html#AEN41151
 
-	replaced := strings.Replace(arg, "\\", "\\\\", -1)
-	replaced = strings.Replace(replaced, "'", "\\'", -1)
-	return replaced
+	return strings.NewReplacer(` `, `\ `, `'`, `\'`, `\`, `\\`).Replace(arg)
 }
 
 func connectionString(host string, dbname string, username string, password string, sslmode string, port int) string {
-	// TODO: escape single quote
-	return fmt.Sprintf(
-		"host='%s' dbname='%s' user='%s' password='%s' sslmode='%s' port='%d'",
-		host, pgEscapeArg(dbname), pgEscapeArg(username), pgEscapeArg(password), sslmode, port)
+
+	addKeyIfNotExist := func(kvs map[string]string, key string, val string) {
+		if _, ok := kvs[key]; !ok {
+			kvs[key] = pgEscapeArg(val)
+		}
+	}
+	kvs := parseURL(dbname)
+	addKeyIfNotExist(kvs, "host", host)
+	addKeyIfNotExist(kvs, "dbname", dbname)
+	addKeyIfNotExist(kvs, "user", username)
+	addKeyIfNotExist(kvs, "password", password)
+	addKeyIfNotExist(kvs, "port", strconv.Itoa(port))
+	addKeyIfNotExist(kvs, "sslmode", sslmode)
+	var connArgs []string
+
+	for k, v := range kvs {
+		connArgs = append(connArgs, fmt.Sprintf("%s='%s'", k, v))
+	}
+	return strings.Join(connArgs, " ")
 }
 
 type IndexBloatDatabaseResult struct {
