@@ -2,7 +2,7 @@ import d3 from 'd3';
 
 
 export function formatBytes(bytes) {
-    //WRONG
+    //WRONG to psql
     if(bytes == 0) return '0 Byte';
     var k = 1000;
     var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
@@ -12,5 +12,5 @@ export function formatBytes(bytes) {
 
 
 export function formatPercent(val) {
-    return val + "%"; 
+    return val + "%";
 }
