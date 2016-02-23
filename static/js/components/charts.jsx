@@ -109,10 +109,10 @@ export class BarChart extends React.Component {
     var rect = svg.selectAll("rect")
                   .data(data)
                   .enter().append("rect")
-                  .attr("x", function(d, i) { console.log(x(i) + margin.left) ;return x(i) + margin.left; })
+                  .attr("x", function(d, i) { return x(i) + margin.left; })
                   .attr("width", x.rangeBand())
-                  .attr("y", function(d) { console.log(d.y);return y(d.y); })
-                  .attr("height", function(d) { console.log(y(0) - y(d.y)); return y(0) - y(d.y); })
+                  .attr("y", function(d) { return y(d.y); })
+                  .attr("height", function(d) { return y(0) - y(d.y); })
                   .on("mouseover", (d, i) => {
                     //this should use action dispatch to update the state
                     var suffix = "";
