@@ -107,32 +107,16 @@ func main() {
 	}
 	db := connectDB(*host, *database, *username, pwd, *sslmode, *port)
 	context := &appContext{db, &metrics}
-	// Scheduling tasks
-
-	c := cron.New()
-	c.AddFunc(*scheduleIndexBloat,
-		func() {
-			indexBloatUpdate(db, &metrics, GetIndexBloatResult, 120)
-		},
-	)
-	c.AddFunc(*scheduleTableBloat,
-		func() {
-			tableBloatUpdate(db, &metrics, GetTableBloatResult, 120)
-		},
-	)
-	c.AddFunc(*scheduleDbSize,
-		func() {
-			databaseSizeUpdate(db, &metrics, GetDatabeSizeResult, 120)
-		},
-	)
-	c.AddFunc(*scheduleNumConn,
-		func() {
-			numberOfConnectionUpdate(db, &metrics, GetNumberOfConnectionResult, 120)
-		},
-	)
-	c.Start()
-
 	log.Printf("Starting Pome %s", Version)
 	log.Printf("Application will be available at http://127.0.0.1:%d", *webPort)
+
+	initScheduler(
+		db,
+		&metrics,
+		*scheduleTableBloat,
+		*scheduleDbSize,
+		*scheduleIndexBloat,
+		*scheduleNumConn,
+	)
 	initWebServer(context, *webPort)
 }
