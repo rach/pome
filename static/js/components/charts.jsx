@@ -199,6 +199,14 @@ export class BytesBarChart extends BarChart {
              .tickFormat(this.yFormatter())
              .orient("left");
   }
+  yScale(){
+    const max_bytes = this.yMax();
+    const max_thick_val = roundBytes(max_bytes);
+    var y = d3.scale.linear()
+              .domain([0, max_thick_val])
+              .range([this.height(), 0]);
+    return y;
+  }
 }
 
 export class PercentBarChart extends BarChart {
