@@ -8,15 +8,22 @@ import (
 )
 
 type MetricList struct {
-	TableBloat           map[string]Metric `json:"table_bloat"`
-	IndexBloat           map[string]Metric `json:"index_bloat"`
-	TopBloatIndexRatio   []Metric          `json:"top_index_bloat"`
-	TopBloatTableRatio   []Metric          `json:"top_table_bloat"`
-	TotalTableBloatBytes []Metric          `json:"total_table_bloat_bytes"`
-	TotalIndexBloatBytes []Metric          `json:"total_index_bloat_bytes"`
-	DatabaseSize         []Metric          `json:"database_size"`
-	NumberOfConnection   []Metric          `json:"number_of_connection"`
-	Version              string            `json:"version"`
+	TableBloat            map[string]Metric `json:"table_bloat"`
+	IndexBloat            map[string]Metric `json:"index_bloat"`
+	TopBloatIndexRatio    []Metric          `json:"top_index_bloat"`
+	TopBloatTableRatio    []Metric          `json:"top_table_bloat"`
+	TotalTableBloatBytes  []Metric          `json:"total_table_bloat_bytes"`
+	TotalIndexBloatBytes  []Metric          `json:"total_index_bloat_bytes"`
+	DatabaseSize          []Metric          `json:"database_size"`
+	NumberOfConnection    []Metric          `json:"number_of_connection"`
+	Version               string            `json:"version"`
+	TransactionPerSec     []Metric          `json:"transaction_per_sec"`
+	LastTransactionNumber TransactionNumber `json:"-"`
+}
+
+type TransactionNumber struct {
+	Timestamp int64
+	Count     int64
 }
 
 func initMetricList(version string) MetricList {
@@ -30,6 +37,7 @@ func initMetricList(version string) MetricList {
 		TotalIndexBloatBytes: []Metric{},
 		DatabaseSize:         []Metric{},
 		NumberOfConnection:   []Metric{},
+		TransactionPerSec:    []Metric{},
 	}
 }
 
@@ -40,9 +48,14 @@ type Metric interface {
 
 type Metrics []Metric
 
+type transactionPerSecMetric struct {
+	Timestamp int64 `json:"timestamp"`
+	Tps       int   `json:"tps"`
+}
+
 type numberConnectionMetric struct {
 	Timestamp int64 `json:"timestamp"`
-	Count     int   `db:"count" json:"count"`
+	Count     int   `json:"count"`
 }
 
 type databaseSizeMetric struct {
@@ -222,4 +235,15 @@ func numberOfConnectionUpdate(db *sqlx.DB, metrics *MetricList, datafct database
 	res := (datafct(db)).(NumberOfConnectionResult)
 	met := numberConnectionMetric{timestamp, res.Count}
 	(*metrics).NumberOfConnection = appendAndFilter((*metrics).NumberOfConnection, met, limit)
+}
+
+func transactionPerSecUpdate(db *sqlx.DB, metrics *MetricList, datafct databaseResultFct, limit int) {
+	timestamp := GetTimestamp()
+	res := (datafct(db)).(TransactionNumberResult)
+	if &metrics.LastTransactionNumber != nil {
+		tps := (res.Count - metrics.LastTransactionNumber.Count) / (timestamp - metrics.LastTransactionNumber.Timestamp)
+		met := transactionPerSecMetric{timestamp, int(tps)}
+		(*metrics).TransactionPerSec = appendAndFilter((*metrics).TransactionPerSec, met, limit)
+	}
+	metrics.LastTransactionNumber = TransactionNumber{Timestamp: timestamp, Count: res.Count}
 }

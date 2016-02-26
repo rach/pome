@@ -75,11 +75,18 @@ class Home extends Component {
           x: v.timestamp,
           y: v.count
         };
-      }
-      );
+      });
+      const transactionPerSec = state.app.metrics.transaction_per_sec.map((v)=> {
+        return {
+          x: v.timestamp,
+          y: v.tps
+        };
+      });
         return (
             <div>
                 <BarChart data={numOfConnection} title={"Number of connections"}/>
+                <hr/>
+                <BarChart data={transactionPerSec} title={"Transactions per second"}/>
                 <hr/>
                 <PercentBarChart data={indexBloat} title={"Most bloated index"}/>
                 <hr/>

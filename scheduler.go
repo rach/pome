@@ -19,7 +19,8 @@ func initScheduler(
 	scheduleTableBloat string,
 	scheduleDbSize string,
 	scheduleIndexBloat string,
-	scheduleNumConn string) {
+	scheduleNumConn string,
+	scheduleTPS string) {
 
 	c := cron.New()
 	scheduleMetric(c, scheduleIndexBloat,
@@ -40,6 +41,12 @@ func initScheduler(
 	scheduleMetric(c, scheduleNumConn,
 		func() {
 			numberOfConnectionUpdate(db, metrics, GetNumberOfConnectionResult, 120)
+		},
+	)
+	scheduleMetric(c, scheduleTPS,
+		func() {
+			// GetTransactionNumberResult only return the current number of transaction currently
+			transactionPerSecUpdate(db, metrics, GetTransactionNumberResult, 120)
 		},
 	)
 	c.Start()

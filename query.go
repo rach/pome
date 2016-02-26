@@ -107,6 +107,10 @@ func connectionString(host string, dbname string, username string, password stri
 	return strings.Join(connArgs, " ")
 }
 
+type TransactionNumberResult struct {
+	Count int64 `db:"count"`
+}
+
 type IndexBloatDatabaseResult struct {
 	Key        string  `db:"key"`
 	Schema     string  `db:"schema"`
@@ -178,6 +182,18 @@ func GetDatabeSizeResult(db *sqlx.DB) interface{} {
 	}
 	r := DatabaseSizeResult{}
 	err := db.Get(&r, DatabaseSizeSql)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return r
+}
+
+func GetTransactionNumberResult(db *sqlx.DB) interface{} {
+	if *verbose {
+		log.Printf("Fetch Transaction Number")
+	}
+	r := TransactionNumberResult{}
+	err := db.Get(&r, TransactionNumberSql)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -356,4 +372,8 @@ SELECT numbackends as num_connections FROM pg_stat_database WHERE datname = curr
      ORDER BY total_size DESC
  ) AS pretty_sizes;
  `
+
+	TransactionNumberSql = `
+SELECT xact_commit+xact_rollback as count FROM pg_stat_database WHERE datname = current_database();
+`
 )

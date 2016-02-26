@@ -89,6 +89,11 @@ var (
 			Flag("schedule-num-conn", "Cron like expression for when to query the number of connection").
 			Default("@every 5m"),
 	)
+	scheduleTPS = CronFlag(
+		app.
+			Flag("schedule-tps", "Cron like expression for when to query the transaction per second estimate").
+			Default("@every 1m"),
+	)
 )
 
 func parseCmdLine(args []string) (command string, err error) {
@@ -117,6 +122,7 @@ func main() {
 		*scheduleDbSize,
 		*scheduleIndexBloat,
 		*scheduleNumConn,
+		*scheduleTPS,
 	)
 	initWebServer(context, *webPort)
 }
