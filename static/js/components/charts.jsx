@@ -107,7 +107,7 @@ export class BarChart extends React.Component {
                   .attr("transform", "translate(0," + margin.top + ")");
 
     var rect = svg.selectAll("rect")
-                  .data(data)
+                  .data(data.reverse())
                   .enter().append("rect")
                   .attr("x", function(d, i) { return x(i) + margin.left; })
                   .attr("width", x.rangeBand())
