@@ -48,13 +48,13 @@ func newStaticHandler() http.Handler {
 	return http.FileServer(&fs)
 }
 
-func initWebServer(context *appContext, webPort int) {
+func initWebServer(context *appContext, webHost string, webPort int) {
 	http.Handle("/api/stats", appHandler{context, metricsHandler})
 	http.HandleFunc("/about", aliasHandler)
 	http.HandleFunc("/bloat/indexes", aliasHandler)
 	http.HandleFunc("/bloat/tables", aliasHandler)
 	http.Handle("/", newStaticHandler())
-	http.ListenAndServe(fmt.Sprintf(":%d", webPort), nil)
+	http.ListenAndServe(fmt.Sprintf("%s:%d", webHost, webPort), nil)
 }
 
 func (ah appHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
