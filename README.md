@@ -1,4 +1,4 @@
-#Pome
+# Pome
 
 Pome stands for **Po**stgres **Me**trics.
 Pome is a PostgreSQL Metrics Dashboard to keep track of the health of your database.
@@ -10,7 +10,7 @@ You can read more about the motivation behind Pome [here](http://rachbelaid.com/
 [![Join the chat at https://gitter.im/rach/pome](https://badges.gitter.im/rach/pome.svg)](https://gitter.im/rach/pome?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
-##How to install Pome
+## How to install Pome
 
 Pome provides pre-built binaries with the [releases](https://github.com/rach/pome/releases), but you can also use the Go packaging system:
 
@@ -22,7 +22,7 @@ Then to update Pome:
 
 To install Go, you can follow the Go [documentation](https://golang.org/doc/install) or use your internal packaging system. 
 
-##How to run Pome
+## How to run Pome
 
 The command line provides some help on how to use Pome:
 
@@ -56,7 +56,7 @@ Once Pome is running, you can access the dashboard via your browser and you shou
 
 ![Home screenshot](https://raw.githubusercontent.com/rach/pome/master/screenshots/home.png)
 
-##Which metrics does Pome provide
+## Which metrics does Pome provide
 
 Right now, Pome collects the following metrics:
 
@@ -83,7 +83,7 @@ There are a lot of other metrics that will be added soon, like:
 If you are interested in monitoring CPU, disk IO ... This will need to be done via another tool.
 Pome will only be collecting data which can be gathered through Postgres 
 
-##Why build Pome?
+## Why build Pome?
 ### Context
 
 PostgreSQL is incredibly stable, especially with small databases. You too often see databases in the wild without the care of a loving DBA.
@@ -104,16 +104,16 @@ Batteries Included, Pome is built to be accessed via a web interface. The web ap
 Pome isn't aiming to be a tool for humongous Postgres instances which are already in the hands of a DBA who can have the time to setup more advanced monitoring tools. Pome won't be an alternative to a more configurable tool like collectd.
 
 
-##Can I use Pome in Production?
+## Can I use Pome in Production?
 
 If the database is heavily used then I would avoid it for now until we get more load testing and more configuration options. 
 
-##Supported PostgreSQL Versions
+## Supported PostgreSQL Versions
 
 The tool has been developed and tested against PG 9.4 and it should be working on the future versions.
 Pome doesn't have the intent to support older versions because it may require to have different SQL statements for different versions but if there are some requests it will be considered.
 
-##Stateless
+## Stateless
 
 Pome is stateless (at least for now) to keep the tool simple. I did consider using few options:
 - using an external time series database
@@ -122,7 +122,7 @@ Pome is stateless (at least for now) to keep the tool simple. I did consider usi
 But at the end, I decided to keep it simple and store the last 120 metrics in-memory with the trade-offs that it implies.
 Let see where Pome goes, so that may change.
 
-##Contributing 
+## Contributing 
 
 This project had also some learning motivation, as I had never written a Go project and hadn't touched react for a while. I may have made some mistakes or didn't follow some good practices for which I would appreciate some feedbacks.
 
@@ -136,7 +136,7 @@ Both languages used are not my daily programming language so I probably did begi
 - Report issues
 - Solving bugs from the issue trackers
 
-##Inspirations
+## Inspirations
 
 When Pome was only a rough idea, I checked online what already existed and I found a few similar projects which inspired me:
 
@@ -148,6 +148,6 @@ When Pome was only a rough idea, I checked online what already existed and I fou
 
 Pome has a different goal from the tools above.
 
-##Licence 
+## Licence 
 
 Pome is licensed under Apache V2 license, the full license text can be found [here](https://github.com/rach/pome/blob/master/LICENSE)
