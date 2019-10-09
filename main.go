@@ -6,7 +6,7 @@ import (
 	"os"
 	"os/user"
 
-	"github.com/rach/pome/Godeps/_workspace/src/github.com/alecthomas/kingpin"
+	"github.com/alecthomas/kingpin"
 	"github.com/robfig/cron"
 )
 

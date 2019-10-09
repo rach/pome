@@ -8,9 +8,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/rach/pome/Godeps/_workspace/src/github.com/elazarl/go-bindata-assetfs"
-	"github.com/rach/pome/Godeps/_workspace/src/github.com/jmoiron/sqlx"
-	_ "github.com/rach/pome/Godeps/_workspace/src/github.com/lib/pq"
+	"github.com/elazarl/go-bindata-assetfs"
+	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 )
 
 type appContext struct {

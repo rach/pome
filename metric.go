@@ -3,8 +3,8 @@ package main
 import (
 	"time"
 
-	"github.com/rach/pome/Godeps/_workspace/src/github.com/jmoiron/sqlx"
-	_ "github.com/rach/pome/Godeps/_workspace/src/github.com/lib/pq"
+	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 )
 
 type MetricList struct {

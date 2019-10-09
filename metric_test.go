@@ -3,7 +3,7 @@ package main
 import (
 	"testing"
 
-	"github.com/rach/pome/Godeps/_workspace/src/github.com/jmoiron/sqlx"
+	"github.com/jmoiron/sqlx"
 )
 
 var IndexBloatSqlStub = []IndexBloatDatabaseResult{
