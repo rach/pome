@@ -33,7 +33,7 @@
     "style-loader": "^0.13.0",
     "webpack": "^1.12.6",
     "bootstrap": "git://github.com/twbs/bootstrap.git#v4-dev",
-    "jquery": "^2.1.4",
+    "jquery": "^3.4.1",
     "react-faux-dom": "^2.1.1",
     "d3": "^3.5.9",
     "redux": "^3.0.4",
